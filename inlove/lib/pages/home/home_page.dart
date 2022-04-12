@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
       _TabInfo(
         'conv',
         CupertinoIcons.conversation_bubble,
-        MyCustomUI(),
+        CardsDemo(),
       ),
       _TabInfo(
         'profile',
@@ -88,7 +88,11 @@ class _CupertinoDemoTab extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
       backgroundColor: CupertinoColors.systemBackground,
-      child: page,
+      resizeToAvoidBottomInset: true,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 70, 0, 50),
+        child: page,
+      ),
     );
   }
 }
