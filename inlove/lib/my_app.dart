@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inlove/pages/diary/memory/memory_page.dart';
+import 'package:inlove/pages/tabs/diary/memory/memory_page.dart';
 
+import 'pages/authentication/authentication_page.dart';
 import 'pages/home/home_page.dart';
-import 'pages/registration_authorication_pages/authorization_page.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => AuthorizationPage(),
         HomePage.routeName: (context) => HomePage(),
-        Memory.routeName: (context) => Memory(),
+        MemoryConstructor.routeName: (context) => MemoryConstructor(),
       },
     );
   }

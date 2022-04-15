@@ -3,13 +3,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ComplimentPage extends StatefulWidget {
+class ComplimentTab extends StatefulWidget {
   static const routeName = '/complimentPage';
+  const ComplimentTab({Key? key}) : super(key: key);
   @override
-  _ComplimentPageState createState() => _ComplimentPageState();
+  _ComplimentTabState createState() => _ComplimentTabState();
 }
 
-class _ComplimentPageState extends State<ComplimentPage> {
+class _ComplimentTabState extends State<ComplimentTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

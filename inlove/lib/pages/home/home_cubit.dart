@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inlove/models/user_model.dart';
+import 'package:inlove/pages/home/home_state.dart';
 
-import 'reg_auth_state.dart';
-
-class RegAuthCubit extends Cubit<RegAuthState> {
-  RegAuthCubit()
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit()
       : super(
-          RegAuthState(
-            user: User('', '', '', sexes.male),
+          HomeState(
+            title: '',
+            pageIndex: 0,
           ),
         );
 
@@ -16,4 +16,6 @@ class RegAuthCubit extends Cubit<RegAuthState> {
       state.copyWith(),
     );
   }
+
+  void setTab(int tanIdex) {}
 }

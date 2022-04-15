@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../models/memory_model.dart';
 import 'memory/memory_page.dart';
 
 Widget searchBar(BuildContext context) {
@@ -50,77 +51,50 @@ Widget searchBar(BuildContext context) {
   );
 }
 
-enum CardType {
-  standard,
-  tappable,
-  selectable,
-}
-
-class TravelDestination {
-  const TravelDestination({
-    required this.assetName,
-    required this.assetPackage,
-    required this.title,
-    required this.description,
-    required this.city,
-    required this.location,
-    this.cardType = CardType.standard,
-  });
-
-  final String assetName;
-  final String assetPackage;
-  final String title;
-  final String description;
-  final String city;
-  final String location;
-  final CardType cardType;
-}
-
-List<TravelDestination> destinations(BuildContext context) => [
-      TravelDestination(
-        assetName: '',
-        assetPackage: 'package',
+List<Memory> destinations(BuildContext context) => [
+      Memory(
+        id: 1,
+        coupleId: 1,
         title: 'title',
         description: 'description',
-        city: 'city',
+        date: DateTime.now(),
         location: 'location',
-        cardType: CardType.tappable,
+        photosId: <int>[],
       ),
-      TravelDestination(
-        assetName: '',
-        assetPackage: 'package',
+      Memory(
+        id: 1,
+        coupleId: 1,
         title: 'title',
         description: 'description',
-        city: 'city',
+        date: DateTime.now(),
         location: 'location',
-        cardType: CardType.tappable,
+        photosId: <int>[],
       ),
-      TravelDestination(
-        assetName: '',
-        assetPackage: 'package',
+      Memory(
+        id: 1,
+        coupleId: 1,
         title: 'title',
         description: 'description',
-        city: 'city',
+        date: DateTime.now(),
         location: 'location',
-        cardType: CardType.selectable,
+        photosId: <int>[],
       ),
     ];
 
 class SelectableTravelDestinationItem extends StatelessWidget {
   const SelectableTravelDestinationItem({
     Key? key,
-    required this.destination,
+    required this.memory,
     required this.isSelected,
     required this.onSelected,
-  })  : assert(destination != null),
-        super(key: key);
+  }) : super(key: key);
 
-  final TravelDestination destination;
+  final Memory memory;
   final bool isSelected;
   final VoidCallback onSelected;
 
   // This height will allow for all the Card's content to fit comfortably within the card.
-  static const height = 298.0;
+  static const height = 340.0;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +131,7 @@ class SelectableTravelDestinationItem extends StatelessWidget {
                             ? colorScheme.primary.withOpacity(0.08)
                             : Colors.transparent,
                       ),
-                      TravelDestinationContent(destination: destination),
+                      TravelDestinationContent(memory: memory),
                       Align(
                         alignment: Alignment.topRight,
                         child: Padding(
@@ -203,11 +177,10 @@ class SectionTitle extends StatelessWidget {
 }
 
 class TravelDestinationContent extends StatelessWidget {
-  const TravelDestinationContent({Key? key, required this.destination})
-      : assert(destination != null),
-        super(key: key);
+  const TravelDestinationContent({Key? key, required this.memory})
+      : super(key: key);
 
-  final TravelDestination destination;
+  final Memory memory;
 
   @override
   Widget build(BuildContext context) {
@@ -229,8 +202,7 @@ class TravelDestinationContent extends StatelessWidget {
                 // a standard Image will obscure the ink splash.
                 child: Ink.image(
                   image: AssetImage(
-                    destination.assetName,
-                    package: destination.assetPackage,
+                    memory.photosId.first.toString(),
                   ),
                   fit: BoxFit.cover,
                   child: Container(),
@@ -244,7 +216,7 @@ class TravelDestinationContent extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    destination.title,
+                    memory.title,
                     style: titleStyle,
                   ),
                 ),
@@ -267,12 +239,12 @@ class TravelDestinationContent extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    destination.description,
+                    memory.description,
                     style: descriptionStyle.copyWith(color: Colors.black54),
                   ),
                 ),
-                Text(destination.city),
-                Text(destination.location),
+                Text(memory.date.toString()),
+                Text(memory.location),
               ],
             ),
           ),
@@ -286,11 +258,6 @@ class TravelDestinationContent extends StatelessWidget {
               child: Text('demoMenuShare',
                   semanticsLabel: 'cardsDemoShareSemantics'),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text('demoMenuShare',
-                  semanticsLabel: 'cardsDemoShareSemantics'),
-            ),
           ],
         ),
       ],
@@ -298,14 +265,14 @@ class TravelDestinationContent extends StatelessWidget {
   }
 }
 
-class CardsDemo extends StatefulWidget {
-  const CardsDemo({Key? key}) : super(key: key);
+class DiaryTab extends StatefulWidget {
+  const DiaryTab({Key? key}) : super(key: key);
 
   @override
-  _CardsDemoState createState() => _CardsDemoState();
+  _DiaryTabState createState() => _DiaryTabState();
 }
 
-class _CardsDemoState extends State<CardsDemo> with RestorationMixin {
+class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
   final RestorableBool _isSelected = RestorableBool(false);
 
   @override
@@ -341,7 +308,7 @@ class _CardsDemoState extends State<CardsDemo> with RestorationMixin {
                     Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       child: SelectableTravelDestinationItem(
-                        destination: destination,
+                        memory: destination,
                         isSelected: _isSelected.value,
                         onSelected: () {
                           setState(() {
@@ -360,7 +327,7 @@ class _CardsDemoState extends State<CardsDemo> with RestorationMixin {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            Memory.routeName,
+            MemoryConstructor.routeName,
           );
         },
       ),

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
-class CalendarPage extends StatelessWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+import '../../../models/entities/photo_model.dart';
 
-  List<_Photo> _photos(BuildContext context) {
+class CalendarTab extends StatelessWidget {
+  const CalendarTab({Key? key}) : super(key: key);
+
+  List<Photo> _photos(BuildContext context) {
     return [
-      _Photo(
+      Photo(
         assetName: 'places/india_chennai_flower_market.png',
         title: 'aaaaaaaa',
         subtitle: 'bbbbbbbbbb',
       ),
-      _Photo(
+      Photo(
         assetName: 'places/india_tanjore_bronze_works.png',
         title: 'aaaaaaaa',
         subtitle: 'bbbbbbbbbb',
       ),
-      _Photo(
+      Photo(
         assetName: 'places/india_tanjore_market_merchant.png',
         title: 'aaaaaaaa',
         subtitle: 'bbbbbbbbbb',
@@ -46,18 +48,6 @@ class CalendarPage extends StatelessWidget {
   }
 }
 
-class _Photo {
-  _Photo({
-    required this.assetName,
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String assetName;
-  final String title;
-  final String subtitle;
-}
-
 /// Allow the text size to shrink to fit in the space
 class _GridTitleText extends StatelessWidget {
   const _GridTitleText(this.text);
@@ -80,7 +70,7 @@ class _GridDemoPhotoItem extends StatelessWidget {
     required this.photo,
   }) : super(key: key);
 
-  final _Photo photo;
+  final Photo photo;
 
   @override
   Widget build(BuildContext context) {
