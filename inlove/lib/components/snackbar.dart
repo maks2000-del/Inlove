@@ -5,7 +5,7 @@ Widget snackBar({
   required String snackbarsText,
   required String snackbarsActionButtonLabe,
   required String snackbarsAction,
-  required String buttonLable,
+  required String snackbarsButtonLable,
 }) {
   return ElevatedButton(
     onPressed: () {
@@ -27,6 +27,6 @@ Widget snackBar({
         ),
       );
     },
-    child: Text(buttonLable),
+    child: Text(snackbarsButtonLable),
   );
 }

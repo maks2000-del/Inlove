@@ -45,6 +45,8 @@ dependencies:
   firebase_storage: ^10.2.6
   firebase_auth: ^3.3.6
   get_it: ^7.2.0
+  flutter_neumorphic: ^3.0.3
+  syncfusion_flutter_datepicker: ^20.1.48
 
 dev_dependencies:
   flutter_test:

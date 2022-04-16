@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-Widget InputTextfield(
-  Size size,
-  IconData icon,
-  String hintText,
-  bool isPassword,
-  bool isEmail,
-  TextEditingController controller,
-) {
+Widget InputTextfield({
+  required Size size,
+  required IconData icon,
+  required String hintText,
+  required bool isPassword,
+  required bool isEmail,
+  required TextEditingController inputController,
+}) {
   return Container(
     height: size.width / 8,
     width: size.width / 1.22,
@@ -18,7 +18,7 @@ Widget InputTextfield(
       borderRadius: BorderRadius.circular(10),
     ),
     child: TextField(
-      controller: controller,
+      controller: inputController,
       style: TextStyle(color: Colors.black.withOpacity(.8)),
       obscureText: isPassword,
       keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
@@ -31,10 +31,10 @@ Widget InputTextfield(
         hintMaxLines: 1,
         hintText: hintText,
         hintStyle: TextStyle(fontSize: 14, color: Colors.black.withOpacity(.5)),
-        suffixIcon: controller.text.isEmpty
+        suffixIcon: inputController.text.isEmpty
             ? null
             : IconButton(
-                onPressed: controller.clear,
+                onPressed: inputController.clear,
                 icon: Icon(Icons.clear),
               ),
       ),

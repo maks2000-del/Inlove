@@ -59,7 +59,7 @@ List<Memory> destinations(BuildContext context) => [
         description: 'description',
         date: DateTime.now(),
         location: 'location',
-        photosId: <int>[],
+        photosId: 'phatoId',
       ),
       Memory(
         id: 1,
@@ -68,7 +68,7 @@ List<Memory> destinations(BuildContext context) => [
         description: 'description',
         date: DateTime.now(),
         location: 'location',
-        photosId: <int>[],
+        photosId: 'phatoId',
       ),
       Memory(
         id: 1,
@@ -77,7 +77,7 @@ List<Memory> destinations(BuildContext context) => [
         description: 'description',
         date: DateTime.now(),
         location: 'location',
-        photosId: <int>[],
+        photosId: 'phatoId',
       ),
     ];
 
@@ -202,7 +202,7 @@ class TravelDestinationContent extends StatelessWidget {
                 // a standard Image will obscure the ink splash.
                 child: Ink.image(
                   image: AssetImage(
-                    memory.photosId.first.toString(),
+                    memory.photosId,
                   ),
                   fit: BoxFit.cover,
                   child: Container(),

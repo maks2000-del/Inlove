@@ -1,3 +1,5 @@
+import 'package:inlove/models/entities/photo_model.dart';
+
 class Memory {
   final int id;
   final int coupleId;
@@ -5,7 +7,7 @@ class Memory {
   final String description;
   final DateTime date;
   final String location;
-  final List<int> photosId;
+  final String photosId;
 
   Memory({
     required this.id,
