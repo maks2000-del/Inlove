@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/pages/home/home_cubit.dart';
-import 'package:inlove/pages/tabs/calendar/calendar_page.dart';
-import 'package:inlove/pages/tabs/comliment/compliment_page.dart';
-import 'package:inlove/pages/tabs/diary/diary_page.dart';
-import 'package:inlove/pages/tabs/settings/settings_page.dart';
+import 'package:inlove/pages/tabs/calendar/calendar_tab.dart';
+import 'package:inlove/pages/tabs/comliment/compliment_tab.dart';
+import 'package:inlove/pages/tabs/diary/diary_tab.dart';
+import 'package:inlove/pages/tabs/settings/settings_tab.dart';
 
 import '../../helpers/keep_alive_page.dart';
 import 'home_state.dart';
@@ -31,15 +30,13 @@ class _HomePageState extends State<HomePage> {
       bloc: _homeCubit,
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(state.title),
-          ),
+          appBar: NeumorphicAppBar(),
           body: PageView(
             onPageChanged: (index) => _homeCubit.setTab(index),
             controller: _controller,
-            children: const [
-              KeepAlivePage(child: ComplimentTab()),
-              KeepAlivePage(child: DiaryTab()),
+            children: [
+              const KeepAlivePage(child: ComplimentTab()),
+              const KeepAlivePage(child: DiaryTab()),
               KeepAlivePage(child: CalendarTab()),
               KeepAlivePage(child: SettingsTab()),
             ],
@@ -52,6 +49,7 @@ class _HomePageState extends State<HomePage> {
             },
             items: const [
               BottomNavigationBarItem(
+                backgroundColor: Colors.black87,
                 icon: Icon(Icons.star),
                 label: 'Compliment',
               ),
