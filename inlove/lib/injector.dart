@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 import 'package:inlove/pages/home/home_cubit.dart';
+import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
+import 'package:inlove/pages/tabs/settings/settings_cubit.dart';
 
 import 'repository/user_repository.dart';
 
@@ -45,5 +47,11 @@ void _setUpCubits() {
   );
   locator.registerFactory<DiaryCubit>(
     () => DiaryCubit(),
+  );
+  locator.registerFactory<SettingsCubit>(
+    () => SettingsCubit(),
+  );
+  locator.registerFactory<CalendarCubit>(
+    () => CalendarCubit(),
   );
 }

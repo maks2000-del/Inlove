@@ -4,6 +4,7 @@ class SpeicalDate {
   final String title;
   final String description;
   final DateTime date;
+  final int bgColorId;
 
   SpeicalDate({
     required this.id,
@@ -11,5 +12,6 @@ class SpeicalDate {
     required this.title,
     required this.description,
     required this.date,
+    required this.bgColorId,
   });
 }

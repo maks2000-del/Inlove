@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:inlove/pages/authentication/authentication_state.dart';
 
 import '../../components/button.dart';
 import '../../components/input_textfield.dart';
 import 'authentication_cubit.dart';
 
-Widget RegistrationComponent({
+Widget registrationComponent({
   required Size size,
   required Animation<double> opacity,
   required Animation<double> transform,
   required AuthorizationCubit authorizationCubit,
-  required VoidCallback openMainPage,
+  required AuthorizationState state,
   required TextEditingController nameFieldController,
   required TextEditingController mailFieldController,
   required TextEditingController passwordFieldController,
@@ -60,7 +61,7 @@ Widget RegistrationComponent({
                   ),
                 ),
                 const SizedBox(),
-                InputTextfield(
+                inputTextfield(
                   size: size,
                   icon: Icons.account_circle_outlined,
                   hintText: 'User name...',
@@ -68,7 +69,7 @@ Widget RegistrationComponent({
                   isEmail: false,
                   inputController: nameFieldController,
                 ),
-                InputTextfield(
+                inputTextfield(
                   size: size,
                   icon: Icons.email_outlined,
                   hintText: 'Email...',
@@ -76,7 +77,7 @@ Widget RegistrationComponent({
                   isEmail: true,
                   inputController: mailFieldController,
                 ),
-                InputTextfield(
+                inputTextfield(
                   size: size,
                   icon: Icons.lock_outline,
                   hintText: 'Password...',
@@ -84,10 +85,40 @@ Widget RegistrationComponent({
                   isEmail: false,
                   inputController: passwordFieldController,
                 ),
+                inputTextfield(
+                  size: size,
+                  icon: Icons.lock_outline,
+                  hintText: 'Repeat password...',
+                  isPassword: true,
+                  isEmail: false,
+                  inputController: passwordFieldController,
+                ),
+                NeumorphicToggle(
+                  children: [
+                    ToggleElement(
+                      background: Center(child: Text('male')),
+                    ),
+                    ToggleElement(
+                      background: Center(child: Text('female')),
+                    ),
+                  ],
+                  thumb: Center(child: Text('a')),
+                  selectedIndex: state.toggleSex,
+                  onChanged: (selected) => {
+                    authorizationCubit.switchToggleSex(selected),
+                  },
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('I am single'),
+                    NeumorphicSwitch(),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SimpleButton(
+                    simpleButton(
                       size,
                       'REGISTER',
                       2.6,

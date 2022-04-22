@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-Widget SimpleButton(
+Widget simpleButtonOld(
   Size appSize,
   String title,
   double width,
@@ -22,6 +23,25 @@ Widget SimpleButton(
         title,
         style:
             const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+      ),
+    ),
+  );
+}
+
+Widget simpleButton(
+  Size appSize,
+  String title,
+  double width,
+  VoidCallback voidCallback,
+) {
+  return NeumorphicButton(
+    onPressed: voidCallback,
+    child: Container(
+      height: appSize.width / 12,
+      width: appSize.width / 6 + width,
+      alignment: Alignment.center,
+      child: Text(
+        title,
       ),
     ),
   );

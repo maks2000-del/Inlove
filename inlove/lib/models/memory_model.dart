@@ -1,5 +1,3 @@
-import 'package:inlove/models/entities/photo_model.dart';
-
 class Memory {
   final int id;
   final int coupleId;

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class ComplimentTab extends StatefulWidget {
   static const routeName = '/complimentPage';
@@ -42,7 +43,7 @@ class _AnimCardState extends State<AnimCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return NeumorphicBackground(
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -50,19 +51,17 @@ class _AnimCardState extends State<AnimCard> {
             padding: EdgeInsets.only(top: padding, bottom: bottomPadding),
             duration: Duration(milliseconds: 1000),
             curve: Curves.fastLinearToSlowEaseIn,
-            child: Container(
-              child: CardItem(
-                widget.color,
-                widget.num,
-                widget.numEng,
-                widget.content,
-                () {
-                  setState(() {
-                    padding = padding == 0 ? 150.0 : 0.0;
-                    bottomPadding = bottomPadding == 0 ? 150 : 0.0;
-                  });
-                },
-              ),
+            child: CardItem(
+              widget.color,
+              widget.num,
+              widget.numEng,
+              widget.content,
+              () {
+                setState(() {
+                  padding = padding == 0 ? 150.0 : 0.0;
+                  bottomPadding = bottomPadding == 0 ? 150 : 0.0;
+                });
+              },
             ),
           ),
           Align(

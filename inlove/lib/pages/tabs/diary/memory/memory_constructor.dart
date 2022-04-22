@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/injector.dart';
-import 'package:inlove/models/entities/photo_model.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
 
 import '../../../../components/button.dart';
@@ -10,15 +9,21 @@ import '../../../../components/snackbar.dart';
 import '../diary_state.dart';
 
 class MemoryConstructor extends StatefulWidget {
-  MemoryConstructor({Key? key}) : super(key: key);
   static const routeName = '/memoryConstructor';
 
   final _cubit = locator.get<DiaryCubit>();
+
+  MemoryConstructor({Key? key}) : super(key: key);
+
   @override
   State<MemoryConstructor> createState() => _MemoryConstructorState();
 }
 
 class _MemoryConstructorState extends State<MemoryConstructor> {
+  final _titleController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
@@ -27,7 +32,7 @@ class _MemoryConstructorState extends State<MemoryConstructor> {
       bloc: widget._cubit,
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
+          appBar: NeumorphicAppBar(
             title: const Text('craete a new memory'),
           ),
           body: _bodyConstructor(
@@ -35,6 +40,9 @@ class _MemoryConstructorState extends State<MemoryConstructor> {
             diaryCubit: widget._cubit,
             state: state,
             size: _size,
+            titleController: _titleController,
+            locationController: _locationController,
+            descriptionController: _descriptionController,
           ),
         );
       },
@@ -47,38 +55,41 @@ Widget _bodyConstructor({
   required DiaryCubit diaryCubit,
   required DiaryState state,
   required Size size,
+  required TextEditingController titleController,
+  required TextEditingController locationController,
+  required TextEditingController descriptionController,
 }) {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _locationController = TextEditingController();
-  late final DateTime _dateTime;
-  late final Photo? _photo;
-
   return Column(
     children: [
-      InputTextfield(
+      inputTextfield(
         size: size,
         icon: Icons.abc,
         hintText: 'memory title..',
         isPassword: false,
         isEmail: false,
-        inputController: _titleController,
+        inputController: titleController,
       ),
-      InputTextfield(
-        size: size,
-        icon: Icons.abc,
-        hintText: 'description..',
-        isPassword: false,
-        isEmail: false,
-        inputController: _descriptionController,
+      const SizedBox(
+        height: 20.0,
       ),
-      InputTextfield(
+      inputTextfield(
         size: size,
         icon: Icons.abc,
         hintText: 'memory location..',
         isPassword: false,
         isEmail: false,
-        inputController: _locationController,
+        inputController: locationController,
+      ),
+      const SizedBox(
+        height: 20.0,
+      ),
+      inputTextfield(
+        size: size,
+        icon: Icons.abc,
+        hintText: 'description..',
+        isPassword: false,
+        isEmail: false,
+        inputController: descriptionController,
       ),
       Row(
         children: [
@@ -87,20 +98,19 @@ Widget _bodyConstructor({
         ],
       ),
       Container(
-        alignment: Alignment.centerRight,
-        child: SimpleButton(
+        alignment: Alignment.bottomRight,
+        child: simpleButton(
           size,
           'CREATE',
-          100.0,
+          0.0,
           () async {
-            _dateTime ??= DateTime.now();
-            _photo ??= 'defaultPhoto' as Photo?;
             final result = await diaryCubit.addNewMemory(
-                _titleController.text,
-                _descriptionController.text,
-                _locationController.text,
-                _dateTime,
-                _photo);
+              titleController.text,
+              descriptionController.text,
+              locationController.text,
+              DateTime.now(),
+              '',
+            );
             snackBar(
               context: context,
               snackbarsText: result,

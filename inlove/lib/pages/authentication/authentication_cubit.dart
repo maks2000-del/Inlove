@@ -9,12 +9,14 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
           AuthorizationState(
             user: User(
               id: 0,
+              parthnerId: 0,
               name: '',
               email: '',
               password: '',
               sex: sexes.male,
             ),
             showAuthorizationComponent: true,
+            toggleSex: 0,
           ),
         );
 
@@ -25,8 +27,17 @@ class AuthorizationCubit extends Cubit<AuthorizationState> {
   }
 
   void switchRegAuthComponent() {
-    final newShowAuthorizationComponent = !state.showAuthorizationComponent;
+    final oppositeShowAuthorizationComponent =
+        !state.showAuthorizationComponent;
+    emit(
+      state.copyWith(
+          showAuthorizationComponent: oppositeShowAuthorizationComponent),
+    );
+  }
 
-    state.copyWith(showAuthorizationComponent: newShowAuthorizationComponent);
+  void switchToggleSex(int selectedIndex) {
+    emit(
+      state.copyWith(toggleSex: selectedIndex),
+    );
   }
 }

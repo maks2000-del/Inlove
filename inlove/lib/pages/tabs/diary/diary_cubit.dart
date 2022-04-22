@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inlove/models/entities/photo_model.dart';
 
 import '../../../injector.dart';
 import '../../../repository/user_repository.dart';
@@ -26,12 +25,12 @@ class DiaryCubit extends Cubit<DiaryState> {
     String memoryDescription,
     String memoryLocation,
     DateTime dateTime,
-    Photo? photo,
+    String? photoPath,
   ) async {
     return 'Memory has been added';
   }
 
-  Future<String> uploadPhoto(Photo photo) async {
+  Future<String> uploadPhoto() async {
     return 'success';
   }
 }

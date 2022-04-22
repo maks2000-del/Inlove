@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../models/memory_model.dart';
-import 'memory/memory_page.dart';
+import 'memory/memory_constructor.dart';
 
 Widget searchBar(BuildContext context) {
   double _w = MediaQuery.of(context).size.width;
@@ -51,35 +50,35 @@ Widget searchBar(BuildContext context) {
   );
 }
 
-List<Memory> destinations(BuildContext context) => [
-      Memory(
-        id: 1,
-        coupleId: 1,
-        title: 'title',
-        description: 'description',
-        date: DateTime.now(),
-        location: 'location',
-        photosId: 'phatoId',
-      ),
-      Memory(
-        id: 1,
-        coupleId: 1,
-        title: 'title',
-        description: 'description',
-        date: DateTime.now(),
-        location: 'location',
-        photosId: 'phatoId',
-      ),
-      Memory(
-        id: 1,
-        coupleId: 1,
-        title: 'title',
-        description: 'description',
-        date: DateTime.now(),
-        location: 'location',
-        photosId: 'phatoId',
-      ),
-    ];
+List<Memory> destinations = [
+  Memory(
+    id: 1,
+    coupleId: 1,
+    title: 'title',
+    description: 'description',
+    date: DateTime.now(),
+    location: 'location',
+    photosId: 'phatoId',
+  ),
+  Memory(
+    id: 1,
+    coupleId: 1,
+    title: 'title',
+    description: 'description',
+    date: DateTime.now(),
+    location: 'location',
+    photosId: 'phatoId',
+  ),
+  Memory(
+    id: 1,
+    coupleId: 1,
+    title: 'title',
+    description: 'description',
+    date: DateTime.now(),
+    location: 'location',
+    photosId: 'phatoId',
+  ),
+];
 
 class SelectableTravelDestinationItem extends StatelessWidget {
   const SelectableTravelDestinationItem({
@@ -288,6 +287,25 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
     super.dispose();
   }
 
+  // ListView(
+  //               restorationId: 'cards_demo_list_view',
+  //               padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+  //               children: [
+  //                 for (final destination in destinations(context))
+  //                   Container(
+  //                     margin: const EdgeInsets.only(bottom: 8),
+  //                     child: SelectableTravelDestinationItem(
+  //                       memory: destination,
+  //                       isSelected: _isSelected.value,
+  //                       onSelected: () {
+  //                         setState(() {
+  //                           _isSelected.value = !_isSelected.value;
+  //                         });
+  //                       },
+  //                     ),
+  //                   ),
+  //               ],
+  //             ),
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,24 +318,24 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
             ),
             Expanded(
               flex: 5,
-              child: ListView(
-                restorationId: 'cards_demo_list_view',
-                padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-                children: [
-                  for (final destination in destinations(context))
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: SelectableTravelDestinationItem(
-                        memory: destination,
-                        isSelected: _isSelected.value,
-                        onSelected: () {
-                          setState(() {
+              child: ListView.builder(
+                itemCount: destinations.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: SelectableTravelDestinationItem(
+                      memory: destinations[index],
+                      isSelected: _isSelected.value,
+                      onSelected: () {
+                        setState(
+                          () {
                             _isSelected.value = !_isSelected.value;
-                          });
-                        },
-                      ),
+                          },
+                        );
+                      },
                     ),
-                ],
+                  );
+                },
               ),
             ),
           ],

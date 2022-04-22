@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
+import 'package:inlove/models/user_model.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 
 import '../../components/button.dart';
 import '../../components/input_textfield.dart';
 
-Widget AuthorizationComponent({
+Widget authorizationComponent({
   required Size size,
   required Animation<double> opacity,
   required Animation<double> transform,
@@ -62,15 +63,7 @@ Widget AuthorizationComponent({
                   ),
                 ),
                 const SizedBox(),
-                InputTextfield(
-                  size: size,
-                  icon: Icons.account_circle_outlined,
-                  hintText: 'User name...',
-                  isPassword: false,
-                  isEmail: false,
-                  inputController: nameFieldController,
-                ),
-                InputTextfield(
+                inputTextfield(
                   size: size,
                   icon: Icons.email_outlined,
                   hintText: 'Email...',
@@ -78,7 +71,7 @@ Widget AuthorizationComponent({
                   isEmail: true,
                   inputController: mailFieldController,
                 ),
-                InputTextfield(
+                inputTextfield(
                   size: size,
                   icon: Icons.lock_outline,
                   hintText: 'Password...',
@@ -98,7 +91,6 @@ Widget AuthorizationComponent({
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            print('syka');
                             Fluttertoast.showToast(
                               msg: 'Create a new Account button pressed',
                             );
@@ -107,13 +99,22 @@ Widget AuthorizationComponent({
                       ),
                     ),
                     SizedBox(width: size.width / 25),
-                    SimpleButton(
+                    simpleButton(
                       size,
                       'LOGIN',
-                      2.6,
+                      20.0,
                       () {
-                        //HapticFeedback.lightImpact();
-                        //Fluttertoast.showToast(msg: 'Login button pressed');
+                        Fluttertoast.showToast(msg: 'Login button pressed');
+                        GetIt.instance.registerSingleton<User>(
+                          User(
+                            id: 0,
+                            parthnerId: 0,
+                            name: '',
+                            email: '',
+                            password: '',
+                            sex: sexes.male,
+                          ),
+                        );
                         openMainPage();
                       },
                     ),

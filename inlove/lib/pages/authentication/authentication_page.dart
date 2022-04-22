@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 import 'package:inlove/pages/authentication/authentication_state.dart';
 import 'package:inlove/pages/authentication/authorization_component.dart';
@@ -79,10 +80,10 @@ class _AuthorizationPageState extends State<AuthorizationPage>
               elevation: 0,
             ),
             body: ScrollConfiguration(
-              behavior: MyBehavior(),
+              behavior: const ScrollBehavior(),
               child: SingleChildScrollView(
                 child: state.showAuthorizationComponent
-                    ? AuthorizationComponent(
+                    ? authorizationComponent(
                         size: _size,
                         opacity: _opacity,
                         transform: _transform,
@@ -92,12 +93,12 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                         mailFieldController: _mailController,
                         passwordFieldController: _passswordController,
                       )
-                    : RegistrationComponent(
+                    : registrationComponent(
                         size: _size,
                         opacity: _opacity,
                         transform: _transform,
                         authorizationCubit: _authorizationCubit,
-                        openMainPage: _openMainPage,
+                        state: state,
                         nameFieldController: _nameController,
                         mailFieldController: _mailController,
                         passwordFieldController: _passswordController,
@@ -106,16 +107,5 @@ class _AuthorizationPageState extends State<AuthorizationPage>
             ),
           );
         });
-  }
-}
-
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-    BuildContext context,
-    Widget child,
-    AxisDirection axisDirection,
-  ) {
-    return child;
   }
 }
