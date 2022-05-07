@@ -1,10 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inlove/components/button.dart';
 import 'package:inlove/components/input_textfield.dart';
 import 'package:inlove/injector.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
+import 'package:lottie/lottie.dart';
 
 class SpecialDateConstructor extends StatefulWidget {
   static const routeName = '/specialDateConstructor';
@@ -16,10 +18,8 @@ class SpecialDateConstructor extends StatefulWidget {
 }
 
 class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
-  String date = "";
-  DateTime selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime.now();
   final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
   final _calendarCubit = locator.get<CalendarCubit>();
 
   @override
@@ -37,7 +37,6 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
             cubit: _calendarCubit,
             size: _size,
             titleController: _titleController,
-            descriptionController: _descriptionController,
           ),
         );
       },
@@ -48,53 +47,67 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
     required CalendarCubit cubit,
     required Size size,
     required TextEditingController titleController,
-    required TextEditingController descriptionController,
   }) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            _selectDate(context);
-          },
-          child: const Text("Choose Date"),
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Center(
+          child: Lottie.asset(
+            'assets/lottieJSON/calendar.json',
+            width: 250,
+            height: 250,
+            fit: BoxFit.fill,
+          ),
         ),
-        Text(
-          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            inputTextfield(
+              size: size,
+              icon: Icons.text_fields,
+              hintText: 'Date title',
+              isPassword: false,
+              isEmail: false,
+              inputController: titleController,
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            simpleButton(
+              size,
+              "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}",
+              5.0,
+              () => {_selectDate(context)},
+            ),
+            //TODO color picker
+          ],
         ),
-        const SizedBox(
-          height: 50.0,
-        ),
-        inputTextfield(
-          size: size,
-          icon: Icons.text_fields,
-          hintText: 'Date title',
-          isPassword: false,
-          isEmail: false,
-          inputController: titleController,
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        inputTextfield(
-          size: size,
-          icon: Icons.text_snippet,
-          hintText: 'Date description',
-          isPassword: false,
-          isEmail: false,
-          inputController: descriptionController,
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        //TODO color picker
-        simpleButton(
-          size,
-          'CREATE',
-          20.0,
-          () {
-            cubit.createNewDate();
-          },
+        Container(
+          margin: const EdgeInsets.only(bottom: 14.0, right: 20.0),
+          alignment: Alignment.centerRight,
+          child: simpleButton(
+            size,
+            'CREATE',
+            20.0,
+            () async {
+              await cubit.createNewDate(
+                _titleController.text,
+                _selectedDate.toString(),
+              )
+                  ? Fluttertoast.showToast(
+                      msg: 'A new date was added',
+                    )
+                  : Fluttertoast.showToast(
+                      msg: 'Something went wrong',
+                    );
+              //clearing fields after new date was added
+              setState(() {
+                _titleController.text = "";
+                _selectedDate = DateTime.now();
+              });
+            },
+          ),
         ),
       ],
     );
@@ -103,13 +116,14 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2023),
     );
-    if (selected != null && selected != selectedDate)
+    if (selected != null && selected != _selectedDate) {
       setState(() {
-        selectedDate = selected;
+        _selectedDate = selected;
       });
+    }
   }
 }

@@ -1,8 +1,6 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:http/http.dart';
 
 class ComplimentTab extends StatefulWidget {
   static const routeName = '/complimentPage';
@@ -12,14 +10,37 @@ class ComplimentTab extends StatefulWidget {
 }
 
 class _ComplimentTabState extends State<ComplimentTab> {
+  String complimentText = "";
+  String cardTitle = "Check for compliment";
+  void getCompliment() async {
+    try {
+      Response response =
+          await get(Uri.parse("http://10.0.2.2:3001/api/compliment/8"));
+      Map<String, dynamic> copmliment = jsonDecode(response.body);
+      setState(() {
+        complimentText = copmliment['compliment_text'];
+      });
+    } catch (e) {
+      setState(() {
+        complimentText = e.toString();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCompliment();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimCard(
-        Color(0xffFF6594),
-        '',
-        '',
-        '',
+        null,
+        const Color(0xffFF6594),
+        cardTitle,
+        complimentText,
       ),
     );
   }
@@ -27,11 +48,15 @@ class _ComplimentTabState extends State<ComplimentTab> {
 
 class AnimCard extends StatefulWidget {
   final Color color;
-  final String num;
-  final String numEng;
+  final String title;
   final String content;
 
-  AnimCard(this.color, this.num, this.numEng, this.content);
+  const AnimCard(
+    Key? key,
+    this.color,
+    this.title,
+    this.content,
+  ) : super(key: key);
 
   @override
   _AnimCardState createState() => _AnimCardState();
@@ -49,38 +74,48 @@ class _AnimCardState extends State<AnimCard> {
         children: [
           AnimatedPadding(
             padding: EdgeInsets.only(top: padding, bottom: bottomPadding),
-            duration: Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 1000),
             curve: Curves.fastLinearToSlowEaseIn,
             child: CardItem(
-              widget.color,
-              widget.num,
-              widget.numEng,
-              widget.content,
-              () {
+              title: widget.title,
+              color: widget.color,
+              content: widget.content,
+              onTap: () => {
                 setState(() {
                   padding = padding == 0 ? 150.0 : 0.0;
                   bottomPadding = bottomPadding == 0 ? 150 : 0.0;
-                });
+                }),
               },
             ),
           ),
           Align(
             alignment: Alignment.centerRight,
             child: Container(
-              margin: EdgeInsets.only(right: 20, left: 20, top: 200),
+              margin: const EdgeInsets.only(
+                right: 20,
+                left: 20,
+                top: 200,
+              ),
               height: 180,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black.withOpacity(0.2), blurRadius: 30)
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 30,
+                  ),
                 ],
                 color: Colors.grey.shade200.withOpacity(1.0),
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(30)),
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
               ),
               child: Center(
-                  child: Icon(Icons.favorite,
-                      color: Color(0xffFF6594).withOpacity(1.0), size: 70)),
+                child: Icon(
+                  Icons.favorite,
+                  color: const Color(0xffFF6594).withOpacity(1.0),
+                  size: 70,
+                ),
+              ),
             ),
           ),
         ],
@@ -91,49 +126,57 @@ class _AnimCardState extends State<AnimCard> {
 
 class CardItem extends StatelessWidget {
   final Color color;
-  final String num;
-  final String numEng;
   final String content;
-  final onTap;
+  final String title;
+  final VoidCallback onTap;
 
-  CardItem(this.color, this.num, this.numEng, this.content, this.onTap);
+  const CardItem({
+    Key? key,
+    required this.title,
+    required this.content,
+    required this.color,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25),
+        margin: const EdgeInsets.symmetric(horizontal: 25),
         height: 220,
         width: width,
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: Color(0xffFF6594).withOpacity(0.2), blurRadius: 25),
+              color: const Color(0xffFF6594).withOpacity(0.2),
+              blurRadius: 25,
+            ),
           ],
           color: color.withOpacity(1.0),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(30),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Tap to view more',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
-                'Widgets that have global keys reparent their subtrees when they are moved from one location in the tree to another location in the tree. In order to reparent its subtree, a widget must arrive at its new location in the tree in the same animation frame in which it was removed from its old location the tree.',
-                style: TextStyle(
+                content,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

@@ -1,17 +1,18 @@
+import 'package:inlove/models/memory_model.dart';
 import 'package:inlove/models/user_model.dart';
 
 class DiaryState {
-  final int memoryId;
+  final List<Memory> coupleMemorys;
 
   DiaryState({
-    required this.memoryId,
+    required this.coupleMemorys,
   });
 
   DiaryState copyWith({
-    int? memoryId,
+    List<Memory>? coupleMemorys,
   }) {
     return DiaryState(
-      memoryId: memoryId ?? this.memoryId,
+      coupleMemorys: coupleMemorys ?? this.coupleMemorys,
     );
   }
 }

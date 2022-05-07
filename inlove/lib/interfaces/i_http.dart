@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
-
 abstract class IHttp<T> {
   Future<T> get();
   Future<T> post(

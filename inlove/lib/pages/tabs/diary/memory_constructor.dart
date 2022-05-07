@@ -3,10 +3,10 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/injector.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
 
-import '../../../../components/button.dart';
-import '../../../../components/input_textfield.dart';
-import '../../../../components/snackbar.dart';
-import '../diary_state.dart';
+import '../../../components/button.dart';
+import '../../../components/input_textfield.dart';
+import '../../../components/snackbar.dart';
+import 'diary_state.dart';
 
 class MemoryConstructor extends StatefulWidget {
   static const routeName = '/memoryConstructor';

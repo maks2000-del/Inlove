@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
+import 'package:inlove/pages/tabs/diary/diary_state.dart';
 
 import '../../../models/memory_model.dart';
-import 'memory/memory_constructor.dart';
+import 'memory_constructor.dart';
 
 Widget searchBar(BuildContext context) {
   double _w = MediaQuery.of(context).size.width;
@@ -50,36 +54,6 @@ Widget searchBar(BuildContext context) {
   );
 }
 
-List<Memory> destinations = [
-  Memory(
-    id: 1,
-    coupleId: 1,
-    title: 'title',
-    description: 'description',
-    date: DateTime.now(),
-    location: 'location',
-    photosId: 'phatoId',
-  ),
-  Memory(
-    id: 1,
-    coupleId: 1,
-    title: 'title',
-    description: 'description',
-    date: DateTime.now(),
-    location: 'location',
-    photosId: 'phatoId',
-  ),
-  Memory(
-    id: 1,
-    coupleId: 1,
-    title: 'title',
-    description: 'description',
-    date: DateTime.now(),
-    location: 'location',
-    photosId: 'phatoId',
-  ),
-];
-
 class SelectableTravelDestinationItem extends StatelessWidget {
   const SelectableTravelDestinationItem({
     Key? key,
@@ -106,7 +80,7 @@ class SelectableTravelDestinationItem extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            SectionTitle(title: 'selectable title'),
+            const SectionTitle(title: 'selectable title'),
             SizedBox(
               height: height,
               child: Card(
@@ -201,7 +175,7 @@ class TravelDestinationContent extends StatelessWidget {
                 // a standard Image will obscure the ink splash.
                 child: Ink.image(
                   image: AssetImage(
-                    memory.photosId,
+                    '',
                   ),
                   fit: BoxFit.cover,
                   child: Container(),
@@ -254,7 +228,7 @@ class TravelDestinationContent extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {},
-              child: Text('demoMenuShare',
+              child: const Text('demoMenuShare',
                   semanticsLabel: 'cardsDemoShareSemantics'),
             ),
           ],
@@ -272,11 +246,13 @@ class DiaryTab extends StatefulWidget {
 }
 
 class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
+  final _diaryCubit = GetIt.instance.get<DiaryCubit>();
   final RestorableBool _isSelected = RestorableBool(false);
 
   @override
   String get restorationId => 'cards_demo';
 
+  @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     registerForRestoration(_isSelected, 'is_selected');
   }
@@ -287,68 +263,65 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
     super.dispose();
   }
 
-  // ListView(
-  //               restorationId: 'cards_demo_list_view',
-  //               padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-  //               children: [
-  //                 for (final destination in destinations(context))
-  //                   Container(
-  //                     margin: const EdgeInsets.only(bottom: 8),
-  //                     child: SelectableTravelDestinationItem(
-  //                       memory: destination,
-  //                       isSelected: _isSelected.value,
-  //                       onSelected: () {
-  //                         setState(() {
-  //                           _isSelected.value = !_isSelected.value;
-  //                         });
-  //                       },
-  //                     ),
-  //                   ),
-  //               ],
-  //             ),
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _diaryCubit.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Scrollbar(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: searchBar(context),
-            ),
-            Expanded(
-              flex: 5,
-              child: ListView.builder(
-                itemCount: destinations.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: SelectableTravelDestinationItem(
-                      memory: destinations[index],
-                      isSelected: _isSelected.value,
-                      onSelected: () {
-                        setState(
-                          () {
-                            _isSelected.value = !_isSelected.value;
+    return BlocBuilder<DiaryCubit, DiaryState>(
+      bloc: _diaryCubit,
+      builder: (context, state) {
+        return Scaffold(
+          body: Scrollbar(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: searchBar(context),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: ListView.builder(
+                    itemCount: state.coupleMemorys.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        child: SelectableTravelDestinationItem(
+                          memory: state.coupleMemorys[index],
+                          isSelected: _isSelected.value,
+                          onSelected: () {
+                            setState(
+                              () {
+                                _isSelected.value = !_isSelected.value;
+                              },
+                            );
                           },
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            MemoryConstructor.routeName,
-          );
-        },
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                MemoryConstructor.routeName,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

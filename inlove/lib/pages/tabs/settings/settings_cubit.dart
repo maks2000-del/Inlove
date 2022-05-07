@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:inlove/models/user_model.dart';
 
 import 'settings_state.dart';
@@ -16,34 +19,29 @@ class SettingsCubit extends Cubit<SettingsState> {
               sex: sexes.male,
             ),
             isPathnerChosen: false,
+            userNames: [],
           ),
         );
 
   void initState() async {
+    final names = await getListOfUsersNames();
     emit(
-      state.copyWith(),
+      state.copyWith(userNames: names),
     );
   }
 
-  User getUserById(int userId) {
-    final user = User(
-      id: 0,
-      parthnerId: 0,
-      name: '',
-      email: '',
-      password: '',
-      sex: sexes.male,
-    );
-    return user;
-  }
-
-  List<String> getListOfUsersNames() {
-    final List<String> usersNames = [];
-    final List<User> test = [];
-    for (final user in test) {
-      usersNames.add(user.name);
+  Future<List<String>> getListOfUsersNames() async {
+    List<String> userNames = [];
+    try {
+      Response response =
+          await get(Uri.parse("http://10.0.2.2:3001/api/users"));
+      for (final user in jsonDecode(response.body)) {
+        userNames.add(user['name']);
+      }
+      return userNames;
+    } catch (e) {
+      return <String>[];
     }
-    return usersNames;
   }
 
   User findUserByName(String name) {

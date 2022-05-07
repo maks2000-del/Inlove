@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:inlove/pages/tabs/diary/memory/memory_constructor.dart';
+import 'package:inlove/pages/tabs/diary/memory_constructor.dart';
 
 import 'pages/authentication/authentication_page.dart';
 import 'pages/home/home_page.dart';
@@ -15,22 +14,23 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Neumorphic App',
       themeMode: ThemeMode.light,
-      theme: NeumorphicThemeData(
+      theme: const NeumorphicThemeData(
         baseColor: Color(0xFFFFFFFF),
         lightSource: LightSource.topLeft,
         depth: 10,
       ),
-      darkTheme: NeumorphicThemeData(
+      darkTheme: const NeumorphicThemeData(
         baseColor: Color(0xFF3E3E3E),
         lightSource: LightSource.topLeft,
         depth: 6,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => AuthorizationPage(),
-        HomePage.routeName: (context) => HomePage(),
+        '/': (context) => const AuthorizationPage(),
+        HomePage.routeName: (context) => const HomePage(),
         MemoryConstructor.routeName: (context) => MemoryConstructor(),
-        SpecialDateConstructor.routeName: (context) => SpecialDateConstructor(),
+        SpecialDateConstructor.routeName: (context) =>
+            const SpecialDateConstructor(),
       },
     );
   }

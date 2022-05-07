@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
 import 'package:inlove/models/user_model.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 
@@ -103,19 +106,45 @@ Widget authorizationComponent({
                       size,
                       'LOGIN',
                       20.0,
-                      () {
+                      () async {
                         Fluttertoast.showToast(msg: 'Login button pressed');
-                        GetIt.instance.registerSingleton<User>(
-                          User(
-                            id: 0,
-                            parthnerId: 0,
-                            name: '',
-                            email: '',
-                            password: '',
-                            sex: sexes.male,
-                          ),
-                        );
-                        openMainPage();
+                        try {
+                          final authResponse = await post(
+                            Uri.parse('http://10.0.2.2:3001/api/user/auth'),
+                            headers: <String, String>{
+                              'Content-Type': 'application/json; charset=UTF-8',
+                            },
+                            body: jsonEncode(<String, String>{
+                              'email': mailFieldController.text,
+                              'password': passwordFieldController.text,
+                            }),
+                          );
+                          if (authResponse.statusCode == 200) {
+                            User user =
+                                User.fromJson(jsonDecode(authResponse.body));
+                            Response coupleResponse = await get(Uri.parse(
+                                "http://10.0.2.2:3001/api/coupleById/${user.id}"));
+                            Map<String, dynamic> couple =
+                                jsonDecode(coupleResponse.body);
+                            user = user.copyWith(coupleId: couple['id']);
+
+                            GetIt.instance.registerSingleton<User>(
+                              User(
+                                id: user.id,
+                                coupleId: user.coupleId,
+                                name: user.name,
+                                email: user.email,
+                                sex: user.sex,
+                              ),
+                            );
+                            openMainPage();
+                          } else {
+                            print("failed to auth");
+                            throw Exception('Failed to auth user.');
+                          }
+                        } catch (e) {
+                          throw Exception();
+                        }
                       },
                     ),
                   ],

@@ -30,14 +30,13 @@ class _HomePageState extends State<HomePage> {
       bloc: _homeCubit,
       builder: (context, state) {
         return Scaffold(
-          appBar: NeumorphicAppBar(),
           body: PageView(
             onPageChanged: (index) => _homeCubit.setTab(index),
             controller: _controller,
             children: [
               const KeepAlivePage(child: ComplimentTab()),
               const KeepAlivePage(child: DiaryTab()),
-              KeepAlivePage(child: CalendarTab()),
+              const KeepAlivePage(child: CalendarTab()),
               KeepAlivePage(child: SettingsTab()),
             ],
           ),
@@ -49,7 +48,7 @@ class _HomePageState extends State<HomePage> {
             },
             items: const [
               BottomNavigationBarItem(
-                backgroundColor: Colors.black87,
+                backgroundColor: Colors.grey,
                 icon: Icon(Icons.star),
                 label: 'Compliment',
               ),

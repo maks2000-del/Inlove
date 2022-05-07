@@ -96,13 +96,13 @@ Widget registrationComponent({
                 NeumorphicToggle(
                   children: [
                     ToggleElement(
-                      background: Center(child: Text('male')),
+                      background: const Center(child: Text('male')),
                     ),
                     ToggleElement(
-                      background: Center(child: Text('female')),
+                      background: const Center(child: Text('female')),
                     ),
                   ],
-                  thumb: Center(child: Text('a')),
+                  thumb: const Center(child: Text('a')),
                   selectedIndex: state.toggleSex,
                   onChanged: (selected) => {
                     authorizationCubit.switchToggleSex(selected),
@@ -111,8 +111,8 @@ Widget registrationComponent({
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('I am single'),
-                    NeumorphicSwitch(),
+                    const Text('I am single'),
+                    const NeumorphicSwitch(),
                   ],
                 ),
                 Row(

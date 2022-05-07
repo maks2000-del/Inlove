@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 Widget inputTextfield({
@@ -34,7 +33,7 @@ Widget inputTextfield({
               ? null
               : IconButton(
                   onPressed: inputController.clear,
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                 ),
         ),
         onChanged: null,
