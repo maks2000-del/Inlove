@@ -1,21 +1,28 @@
 import 'dart:convert';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+
+import '../../../models/user_model.dart';
 
 class ComplimentTab extends StatefulWidget {
   static const routeName = '/complimentPage';
+
   const ComplimentTab({Key? key}) : super(key: key);
   @override
   _ComplimentTabState createState() => _ComplimentTabState();
 }
 
 class _ComplimentTabState extends State<ComplimentTab> {
+  final user = GetIt.instance.get<User>();
   String complimentText = "";
   String cardTitle = "Check for compliment";
   void getCompliment() async {
     try {
-      Response response =
-          await get(Uri.parse("http://10.0.2.2:3001/api/compliment/8"));
+      final date = DateTime.now().toString().substring(0, 10);
+      final sex = user.sex == sexes.male ? "male" : "female";
+      Response response = await get(Uri.parse(
+          "http://10.0.2.2:3001/api/compliment/couple/${user.coupleId}.${date}.${sex}"));
       Map<String, dynamic> copmliment = jsonDecode(response.body);
       setState(() {
         complimentText = copmliment['compliment_text'];
@@ -36,6 +43,10 @@ class _ComplimentTabState extends State<ComplimentTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: NeumorphicAppBar(
+        leading: const Icon(Icons.emoji_emotions),
+        title: const Text('My compliments'),
+      ),
       body: AnimCard(
         null,
         const Color(0xffFF6594),
@@ -163,9 +174,9 @@ class CardItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'Tap to view more',
-                style: TextStyle(
+              Text(
+                title,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w600,

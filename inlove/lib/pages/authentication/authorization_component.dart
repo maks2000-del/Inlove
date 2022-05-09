@@ -94,9 +94,6 @@ Widget authorizationComponent({
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Fluttertoast.showToast(
-                              msg: 'Create a new Account button pressed',
-                            );
                             authorizationCubit.switchRegAuthComponent();
                           },
                       ),
@@ -107,7 +104,6 @@ Widget authorizationComponent({
                       'LOGIN',
                       20.0,
                       () async {
-                        Fluttertoast.showToast(msg: 'Login button pressed');
                         try {
                           final authResponse = await post(
                             Uri.parse('http://10.0.2.2:3001/api/user/auth'),
@@ -139,7 +135,8 @@ Widget authorizationComponent({
                             );
                             openMainPage();
                           } else {
-                            print("failed to auth");
+                            Fluttertoast.showToast(
+                                msg: 'Check your email or password');
                             throw Exception('Failed to auth user.');
                           }
                         } catch (e) {

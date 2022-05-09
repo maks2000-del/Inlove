@@ -27,13 +27,13 @@ class _AuthorizationPageState extends State<AuthorizationPage>
   final _nameController = TextEditingController();
   final _mailController = TextEditingController();
   final _passswordController = TextEditingController();
+  final _repeatPassswordController = TextEditingController();
 
   @override
   void initState() {
-    //TODO _nameController.addListener(() {});
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
 
     _opacity = Tween<double>(begin: 0, end: 1).animate(
@@ -71,41 +71,43 @@ class _AuthorizationPageState extends State<AuthorizationPage>
     }
 
     return BlocBuilder<AuthorizationCubit, AuthorizationState>(
-        bloc: _authorizationCubit,
-        builder: (context, state) {
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
+      bloc: _authorizationCubit,
+      builder: (context, state) {
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: ScrollConfiguration(
+            behavior: const ScrollBehavior(),
+            child: SingleChildScrollView(
+              child: state.showAuthorizationComponent
+                  ? authorizationComponent(
+                      size: _size,
+                      opacity: _opacity,
+                      transform: _transform,
+                      authorizationCubit: _authorizationCubit,
+                      openMainPage: _openMainPage,
+                      nameFieldController: _nameController,
+                      mailFieldController: _mailController,
+                      passwordFieldController: _passswordController,
+                    )
+                  : registrationComponent(
+                      size: _size,
+                      opacity: _opacity,
+                      transform: _transform,
+                      authorizationCubit: _authorizationCubit,
+                      state: state,
+                      nameFieldController: _nameController,
+                      mailFieldController: _mailController,
+                      passwordFieldController: _passswordController,
+                      repeatPasswordFieldController: _repeatPassswordController,
+                    ),
             ),
-            body: ScrollConfiguration(
-              behavior: const ScrollBehavior(),
-              child: SingleChildScrollView(
-                child: state.showAuthorizationComponent
-                    ? authorizationComponent(
-                        size: _size,
-                        opacity: _opacity,
-                        transform: _transform,
-                        authorizationCubit: _authorizationCubit,
-                        openMainPage: _openMainPage,
-                        nameFieldController: _nameController,
-                        mailFieldController: _mailController,
-                        passwordFieldController: _passswordController,
-                      )
-                    : registrationComponent(
-                        size: _size,
-                        opacity: _opacity,
-                        transform: _transform,
-                        authorizationCubit: _authorizationCubit,
-                        state: state,
-                        nameFieldController: _nameController,
-                        mailFieldController: _mailController,
-                        passwordFieldController: _passswordController,
-                      ),
-              ),
-            ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

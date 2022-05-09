@@ -5,7 +5,7 @@ class Memory {
   final String description;
   final String date;
   final String location;
-  final int photoId;
+  final String photo;
 
   Memory({
     required this.id,
@@ -14,7 +14,7 @@ class Memory {
     required this.description,
     required this.date,
     required this.location,
-    required this.photoId,
+    required this.photo,
   });
 
   factory Memory.fromJson(Map<String, dynamic> json) => Memory(
@@ -24,6 +24,6 @@ class Memory {
         description: json['description'],
         date: json['memory_date'].toString().substring(0, 10),
         location: json['location'],
-        photoId: json['photos_id'],
+        photo: json['photos_id'],
       );
 }

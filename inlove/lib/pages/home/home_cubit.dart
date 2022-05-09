@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inlove/models/user_model.dart';
 import 'package:inlove/pages/home/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -7,7 +6,7 @@ class HomeCubit extends Cubit<HomeState> {
       : super(
           HomeState(
             title: '',
-            pageIndex: 0,
+            tabIndex: 0,
           ),
         );
 
@@ -17,5 +16,10 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void setTab(int tanIdex) {}
+  void setTab(int tabIdex) {
+    final newTabIndex = tabIdex;
+    emit(
+      state.copyWith(tabIndex: newTabIndex),
+    );
+  }
 }

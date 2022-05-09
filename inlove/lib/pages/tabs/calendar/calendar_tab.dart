@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/models/special_date_model.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
@@ -28,11 +29,23 @@ class _CalendarTabState extends State<CalendarTab> {
       bloc: _cubit,
       builder: (context, state) {
         return Scaffold(
+          appBar: NeumorphicAppBar(
+            leading: const Icon(Icons.calendar_today),
+            title: const Text('My dates'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {},
+              ),
+            ],
+          ),
           body: _body(state),
           floatingActionButton: FloatingActionButton(
+            heroTag: "btn2",
+            backgroundColor: const Color.fromARGB(255, 45, 45, 45),
             child: const Icon(
               Icons.add,
-              color: Colors.white,
+              color: Colors.orange,
             ),
             onPressed: () {
               Navigator.pushNamed(
@@ -78,12 +91,9 @@ Widget _gridItem(SpeicalDate speicalDate) {
       borderRadius: BorderRadius.circular(4),
     ),
     clipBehavior: Clip.antiAlias,
-    child: Container(
-      //color: speicalDate.bgColorId,
-      child: Center(
-        child: Text(
-          speicalDate.title.toString(),
-        ),
+    child: Center(
+      child: Text(
+        speicalDate.title.toString(),
       ),
     ),
   );

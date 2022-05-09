@@ -1,6 +1,8 @@
-import 'package:flutter/services.dart';
+import 'dart:convert';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 import 'package:inlove/pages/authentication/authentication_state.dart';
 
 import '../../components/button.dart';
@@ -16,6 +18,7 @@ Widget registrationComponent({
   required TextEditingController nameFieldController,
   required TextEditingController mailFieldController,
   required TextEditingController passwordFieldController,
+  required TextEditingController repeatPasswordFieldController,
 }) {
   return SizedBox(
     height: size.height,
@@ -37,7 +40,7 @@ Widget registrationComponent({
           scale: transform.value,
           child: Container(
             width: size.width * .9,
-            height: size.width * 1.1,
+            height: size.width * 1.4,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -91,9 +94,11 @@ Widget registrationComponent({
                   hintText: 'Repeat password...',
                   isPassword: true,
                   isEmail: false,
-                  inputController: passwordFieldController,
+                  inputController: repeatPasswordFieldController,
                 ),
                 NeumorphicToggle(
+                  height: 50.0,
+                  width: 200.0,
                   children: [
                     ToggleElement(
                       background: const Center(child: Text('male')),
@@ -102,18 +107,15 @@ Widget registrationComponent({
                       background: const Center(child: Text('female')),
                     ),
                   ],
-                  thumb: const Center(child: Text('a')),
+                  thumb: Center(
+                    child: Text(
+                      state.toggleSex == 0 ? 'male' : 'female',
+                    ),
+                  ),
                   selectedIndex: state.toggleSex,
                   onChanged: (selected) => {
                     authorizationCubit.switchToggleSex(selected),
                   },
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text('I am single'),
-                    const NeumorphicSwitch(),
-                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,10 +124,43 @@ Widget registrationComponent({
                       size,
                       'REGISTER',
                       2.6,
-                      () {
-                        HapticFeedback.lightImpact();
-                        Fluttertoast.showToast(msg: 'Register button pressed');
-                        authorizationCubit.switchRegAuthComponent();
+                      () async {
+                        if (nameFieldController.text.length > 1 &&
+                            mailFieldController.text.length > 1 &&
+                            passwordFieldController.text ==
+                                repeatPasswordFieldController.text) {
+                          Fluttertoast.showToast(
+                              msg: 'Register button pressed');
+                          try {
+                            final registrationResponse = await post(
+                              Uri.parse('http://10.0.2.2:3001/api/user'),
+                              headers: <String, String>{
+                                'Content-Type':
+                                    'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(<String, String>{
+                                'name': nameFieldController.text,
+                                'email': mailFieldController.text,
+                                'password': passwordFieldController.text,
+                                'sex': state.toggleSex == 0 ? 'male' : 'female',
+                              }),
+                            );
+                            if (registrationResponse.statusCode == 200) {
+                              Map<String, dynamic> user =
+                                  jsonDecode(registrationResponse.body);
+                              final status = user['status'];
+                              if (status == 'registered') {
+                                Fluttertoast.showToast(
+                                  msg:
+                                      'User ${nameFieldController.text} have been registered',
+                                );
+                                authorizationCubit.switchRegAuthComponent();
+                              }
+                            }
+                          } catch (e) {
+                            Fluttertoast.showToast(msg: 'Something went wrong');
+                          }
+                        }
                       },
                     ),
                   ],

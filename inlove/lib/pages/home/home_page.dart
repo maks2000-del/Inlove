@@ -33,35 +33,50 @@ class _HomePageState extends State<HomePage> {
           body: PageView(
             onPageChanged: (index) => _homeCubit.setTab(index),
             controller: _controller,
-            children: [
-              const KeepAlivePage(child: ComplimentTab()),
-              const KeepAlivePage(child: DiaryTab()),
-              const KeepAlivePage(child: CalendarTab()),
+            children: const [
+              KeepAlivePage(child: ComplimentTab()),
+              KeepAlivePage(child: DiaryTab()),
+              KeepAlivePage(child: CalendarTab()),
               KeepAlivePage(child: SettingsTab()),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: state.pageIndex,
+            currentIndex: state.tabIndex,
             onTap: (int index) {
               _controller.jumpToPage(index);
               _homeCubit.setTab(index);
             },
             items: const [
               BottomNavigationBarItem(
-                backgroundColor: Colors.grey,
-                icon: Icon(Icons.star),
+                backgroundColor: Color.fromARGB(255, 37, 37, 37),
+                icon: Icon(
+                  Icons.emoji_emotions,
+                  color: Colors.orange,
+                ),
                 label: 'Compliment',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.tablet),
+                backgroundColor: Color.fromARGB(255, 37, 37, 37),
+                icon: Icon(
+                  Icons.book,
+                  color: Colors.orange,
+                ),
                 label: 'Diary',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today),
+                backgroundColor: Color.fromARGB(255, 37, 37, 37),
+                icon: Icon(
+                  Icons.calendar_today,
+                  color: Colors.orange,
+                ),
                 label: 'Calendar',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
+                backgroundColor: Color.fromARGB(255, 37, 37, 37),
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.orange,
+                ),
                 label: 'Settings',
               ),
             ],

@@ -19,21 +19,18 @@ class UserPerository implements IHttp<User> {
   @override
   Future<User> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
-    // TODO: implement post
     throw UnimplementedError();
   }
 
   @override
   Future<User> put(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
-    // TODO: implement put
     throw UnimplementedError();
   }
 
   @override
   Future<User> delete(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) {
-    // TODO: implement delete
     throw UnimplementedError();
   }
 }

@@ -8,30 +8,6 @@ import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
 
 import '../../../models/special_date_model.dart';
 
-final List<SpeicalDate> _specialDates = [
-  SpeicalDate(
-    id: 0,
-    coupleId: 0,
-    title: 'test title',
-    date: DateTime.now().toString(),
-    bgColorId: 0,
-  ),
-  SpeicalDate(
-    id: 0,
-    coupleId: 0,
-    title: 'test title',
-    date: DateTime.now().toString(),
-    bgColorId: 0,
-  ),
-  SpeicalDate(
-    id: 0,
-    coupleId: 0,
-    title: 'test title',
-    date: DateTime.now().toString(),
-    bgColorId: 0,
-  ),
-];
-
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit()
       : super(

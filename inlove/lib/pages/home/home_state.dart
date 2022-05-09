@@ -1,21 +1,19 @@
-import 'package:inlove/models/user_model.dart';
-
 class HomeState {
   final String title;
-  final int pageIndex;
+  final int tabIndex;
 
   HomeState({
     required this.title,
-    required this.pageIndex,
+    required this.tabIndex,
   });
 
   HomeState copyWith({
     String? title,
-    int? pageIndex,
+    int? tabIndex,
   }) {
     return HomeState(
       title: title ?? this.title,
-      pageIndex: pageIndex ?? this.pageIndex,
+      tabIndex: tabIndex ?? this.tabIndex,
     );
   }
 }

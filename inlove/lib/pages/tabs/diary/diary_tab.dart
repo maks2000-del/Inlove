@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get_it/get_it.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
 import 'package:inlove/pages/tabs/diary/diary_state.dart';
@@ -80,7 +80,6 @@ class SelectableTravelDestinationItem extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            const SectionTitle(title: 'selectable title'),
             SizedBox(
               height: height,
               child: Card(
@@ -158,28 +157,18 @@ class TravelDestinationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.headline5!.copyWith(color: Colors.white);
+    final titleStyle = theme.textTheme.headline5!.copyWith(color: Colors.black);
     final descriptionStyle = theme.textTheme.subtitle1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 184,
+          height: 200,
           child: Stack(
             children: [
               Positioned.fill(
-                // In order to have the ink splash appear above the image, you
-                // must use Ink.image. This allows the image to be painted as
-                // part of the Material and display ink effects above it. Using
-                // a standard Image will obscure the ink splash.
-                child: Ink.image(
-                  image: AssetImage(
-                    '',
-                  ),
-                  fit: BoxFit.cover,
-                  child: Container(),
-                ),
+                child: Image.network('http://10.0.2.2:3001/${memory.photo}'),
               ),
               Positioned(
                 bottom: 16,
@@ -222,17 +211,6 @@ class TravelDestinationContent extends StatelessWidget {
             ),
           ),
         ),
-        // share, explore buttons
-        ButtonBar(
-          alignment: MainAxisAlignment.start,
-          children: [
-            TextButton(
-              onPressed: () {},
-              child: const Text('demoMenuShare',
-                  semanticsLabel: 'cardsDemoShareSemantics'),
-            ),
-          ],
-        ),
       ],
     );
   }
@@ -265,7 +243,6 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _diaryCubit.initState();
   }
@@ -276,6 +253,16 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
       bloc: _diaryCubit,
       builder: (context, state) {
         return Scaffold(
+          appBar: NeumorphicAppBar(
+            leading: const Icon(Icons.book),
+            title: const Text('My diary'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {},
+              ),
+            ],
+          ),
           body: Scrollbar(
             child: Column(
               children: [
@@ -309,9 +296,11 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            heroTag: "btn1",
+            backgroundColor: const Color.fromARGB(255, 45, 45, 45),
             child: const Icon(
               Icons.add,
-              color: Colors.white,
+              color: Colors.orange,
             ),
             onPressed: () {
               Navigator.pushNamed(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -6,7 +7,6 @@ import 'package:inlove/models/memory_model.dart';
 
 import '../../../injector.dart';
 import '../../../models/user_model.dart';
-import '../../../repository/user_repository.dart';
 import 'diary_state.dart';
 
 class DiaryCubit extends Cubit<DiaryState> {
@@ -16,36 +16,6 @@ class DiaryCubit extends Cubit<DiaryState> {
             coupleMemorys: [],
           ),
         );
-
-  List<Memory> destinations = [
-    Memory(
-      id: 1,
-      coupleId: 1,
-      title: 'title',
-      description: 'description',
-      date: DateTime.now().toString(),
-      location: 'location',
-      photoId: 0,
-    ),
-    Memory(
-      id: 1,
-      coupleId: 1,
-      title: 'title',
-      description: 'description',
-      date: DateTime.now().toString(),
-      location: 'location',
-      photoId: 0,
-    ),
-    Memory(
-      id: 1,
-      coupleId: 1,
-      title: 'title',
-      description: 'description',
-      date: DateTime.now().toString(),
-      location: 'location',
-      photoId: 0,
-    ),
-  ];
 
   final user = locator.get<User>();
 
@@ -83,6 +53,13 @@ class DiaryCubit extends Cubit<DiaryState> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void pickPhoto(File photo) {
+    final newPickedPhoto = photo;
+    emit(
+      state.copyWith(pickedPhoto: newPickedPhoto),
+    );
   }
 
   Future<String> uploadPhoto() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get_it/get_it.dart';
 import 'package:inlove/components/button.dart';
 
@@ -9,7 +10,7 @@ import 'settings_cubit.dart';
 import 'settings_state.dart';
 
 class SettingsTab extends StatefulWidget {
-  SettingsTab({Key? key}) : super(key: key);
+  const SettingsTab({Key? key}) : super(key: key);
 
   @override
   State<SettingsTab> createState() => _SettingsTabState();
@@ -33,6 +34,10 @@ class _SettingsTabState extends State<SettingsTab> {
       bloc: _settingsCubit,
       builder: (context, state) {
         return Scaffold(
+          appBar: NeumorphicAppBar(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+          ),
           body: Column(
             children: [
               state.isPathnerChosen
@@ -62,7 +67,7 @@ Widget parthnersInfo({
 }) {
   return Column(
     children: [
-      Text("a"
+      const Text("a"
           //'Your parthner is ${cubit.getUserById(user.parthnerId).name}',
           ),
       simpleButton(
