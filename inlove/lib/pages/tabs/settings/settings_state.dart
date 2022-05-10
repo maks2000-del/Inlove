@@ -1,25 +1,37 @@
-import 'package:inlove/models/user_model.dart';
+import 'package:inlove/models/entities/short_user.dart';
 
 class SettingsState {
-  final User usersParthner;
   final bool isPathnerChosen;
-  final List<String> userNames;
+  final bool isWaitingForRequest;
+  final String parthnerName;
+  final String coupleStatus;
+  final List<ShortUser> shortUsers;
+  final int? parthnerId;
 
   SettingsState({
-    required this.usersParthner,
     required this.isPathnerChosen,
-    required this.userNames,
+    required this.isWaitingForRequest,
+    required this.parthnerName,
+    required this.coupleStatus,
+    required this.shortUsers,
+    this.parthnerId,
   });
 
   SettingsState copyWith({
-    User? usersParthner,
     bool? isPathnerChosen,
-    List<String>? userNames,
+    bool? isWaitingForRequest,
+    String? parthnerName,
+    String? coupleStatus,
+    List<ShortUser>? shortUsers,
+    int? parthnerId,
   }) {
     return SettingsState(
-      usersParthner: usersParthner ?? this.usersParthner,
       isPathnerChosen: isPathnerChosen ?? this.isPathnerChosen,
-      userNames: userNames ?? this.userNames,
+      isWaitingForRequest: isWaitingForRequest ?? this.isWaitingForRequest,
+      parthnerName: parthnerName ?? this.parthnerName,
+      coupleStatus: coupleStatus ?? this.coupleStatus,
+      shortUsers: shortUsers ?? this.shortUsers,
+      parthnerId: parthnerId ?? this.parthnerId,
     );
   }
 }

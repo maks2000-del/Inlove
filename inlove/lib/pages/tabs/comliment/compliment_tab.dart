@@ -29,7 +29,7 @@ class _ComplimentTabState extends State<ComplimentTab> {
       });
     } catch (e) {
       setState(() {
-        complimentText = e.toString();
+        complimentText = "Maybe next time :P";
       });
     }
   }
@@ -46,6 +46,14 @@ class _ComplimentTabState extends State<ComplimentTab> {
       appBar: NeumorphicAppBar(
         leading: const Icon(Icons.emoji_emotions),
         title: const Text('My compliments'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              getCompliment();
+            },
+          ),
+        ],
       ),
       body: AnimCard(
         null,

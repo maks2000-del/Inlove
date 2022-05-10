@@ -101,11 +101,7 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
                   : Fluttertoast.showToast(
                       msg: 'Something went wrong',
                     );
-              //clearing fields after new date was added
-              setState(() {
-                _titleController.text = "";
-                _selectedDate = DateTime.now();
-              });
+              Navigator.pop(context);
             },
           ),
         ),

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:inlove/components/button.dart';
 
@@ -24,7 +24,12 @@ class _SettingsTabState extends State<SettingsTab> {
   @override
   void initState() {
     super.initState();
-    _settingsCubit.initState();
+    final sex = _user.sex == sexes.male ? "male" : "female";
+    if (_user.coupleId == null) {
+      _settingsCubit.initState(null, sex);
+    } else {
+      _settingsCubit.initState(_user.coupleId, sex);
+    }
   }
 
   @override
@@ -38,21 +43,39 @@ class _SettingsTabState extends State<SettingsTab> {
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
           ),
-          body: Column(
-            children: [
-              state.isPathnerChosen
-                  ? parthnersInfo(
-                      cubit: _settingsCubit,
-                      user: _user,
-                      size: _size,
-                    )
-                  : parthnersFinder(
-                      cubit: _settingsCubit,
-                      user: _user,
-                      size: _size,
-                      state: state,
-                    ),
-            ],
+          body: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                state.isPathnerChosen
+                    ? parthnersInfoBlock(
+                        cubit: _settingsCubit,
+                        user: _user,
+                        size: _size,
+                        state: state,
+                      )
+                    : findParthnerBlock(
+                        cubit: _settingsCubit,
+                        user: _user,
+                        size: _size,
+                        state: state,
+                      ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                simpleButton(
+                  _size,
+                  "LogOut",
+                  10,
+                  () => {
+                    GetIt.instance.unregister<User>(),
+                    Navigator.pushNamed(context, "/"),
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -60,45 +83,93 @@ class _SettingsTabState extends State<SettingsTab> {
   }
 }
 
-Widget parthnersInfo({
+Widget parthnersInfoBlock({
   required SettingsCubit cubit,
+  required SettingsState state,
   required User user,
   required Size size,
 }) {
-  return Column(
-    children: [
-      const Text("a"
-          //'Your parthner is ${cubit.getUserById(user.parthnerId).name}',
-          ),
-      simpleButton(
-        size,
-        'CHANGE',
-        20.0,
-        () {},
-      ),
-    ],
+  return Container(
+    padding: const EdgeInsets.symmetric(
+      vertical: 0.0,
+      horizontal: 20.0,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            user.sex == sexes.male
+                ? const Icon(Icons.man)
+                : const Icon(Icons.woman),
+            const Text(" User: "),
+            Text(user.name),
+          ],
+        ),
+        Row(
+          children: [
+            user.sex == sexes.male
+                ? const Icon(Icons.woman)
+                : const Icon(Icons.man),
+            const Text(" Your parthner is: "),
+            Text(state.parthnerName),
+          ],
+        ),
+        Row(
+          children: [
+            const Icon(Icons.supervised_user_circle),
+            const Text(" Your couple status is: "),
+            Text(state.coupleStatus),
+          ],
+        ),
+      ],
+    ),
   );
 }
 
-Widget parthnersFinder({
+Widget findParthnerBlock({
   required SettingsCubit cubit,
   required User user,
   required Size size,
   required SettingsState state,
 }) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      autocompleteTextfield(state.userNames),
-      const SizedBox(
-        height: 20.0,
-      ),
-      simpleButton(
-        size,
-        'APPLY',
-        20.0,
-        () {},
-      ),
-    ],
-  );
+  return state.isWaitingForRequest
+      ? Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Text('You have request from: '),
+                Text(state.parthnerName),
+              ],
+            ),
+            simpleButton(
+              size,
+              'Accept',
+              0.0,
+              () async {
+                final status = await cubit.acceptCoupleRequest(user.coupleId!);
+                Fluttertoast.showToast(msg: status);
+              },
+            ),
+          ],
+        )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            autocompleteTextfield(state.shortUsers, cubit),
+            const SizedBox(
+              height: 30.0,
+            ),
+            simpleButton(
+              size,
+              'Request',
+              20.0,
+              () async {
+                final status = await cubit.sendCoupleRequest();
+                Fluttertoast.showToast(msg: status);
+              },
+            ),
+          ],
+        );
 }

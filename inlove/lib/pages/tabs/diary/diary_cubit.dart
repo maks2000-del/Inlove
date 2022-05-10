@@ -20,7 +20,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   final user = locator.get<User>();
 
   void initState() {
-    getCoupleDates();
+    getCoupleMemorys();
     emit(
       state.copyWith(),
     );
@@ -36,7 +36,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     return 'Memory has been added';
   }
 
-  void getCoupleDates() async {
+  void getCoupleMemorys() async {
     List<Memory> memorys = [];
     try {
       Response response = await get(

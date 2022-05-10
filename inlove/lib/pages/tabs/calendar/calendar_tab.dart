@@ -16,17 +16,17 @@ class CalendarTab extends StatefulWidget {
 }
 
 class _CalendarTabState extends State<CalendarTab> {
-  final _cubit = locator.get<CalendarCubit>();
+  final _calendarCubit = locator.get<CalendarCubit>();
   @override
   void initState() {
     super.initState();
-    _cubit.initState();
+    _calendarCubit.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarCubit, CalendarState>(
-      bloc: _cubit,
+      bloc: _calendarCubit,
       builder: (context, state) {
         return Scaffold(
           appBar: NeumorphicAppBar(
@@ -35,7 +35,9 @@ class _CalendarTabState extends State<CalendarTab> {
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
-                onPressed: () {},
+                onPressed: () {
+                  _calendarCubit.getCoupleDates();
+                },
               ),
             ],
           ),

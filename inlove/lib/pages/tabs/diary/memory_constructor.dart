@@ -204,19 +204,26 @@ class _MemoryConstructorState extends State<MemoryConstructor> {
                       'description': descriptionController.text,
                       'date': _selectedDate.toString(),
                       'location': locationController.text,
-                      'photosId': basename(state.pickedPhoto!.toString())
-                          .substring(
+                      'photosId': state.pickedPhoto != null
+                          ? basename(state.pickedPhoto!.toString()).substring(
                               0,
                               basename(state.pickedPhoto!.toString()).length -
-                                  1),
+                                  1)
+                          : "null",
                     }),
                   );
                   if (response.statusCode == 200) {
+                    Fluttertoast.showToast(msg: 'Uploaded');
                     if (state.pickedPhoto != null) {
                       upload(state.pickedPhoto!);
                     } else {
                       Fluttertoast.showToast(msg: 'Uploaded without image');
                     }
+                    Navigator.pop(context);
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Something went wrong',
+                    );
                   }
                 },
               ),

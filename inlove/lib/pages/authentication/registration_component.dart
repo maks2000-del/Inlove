@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
@@ -118,8 +119,21 @@ Widget registrationComponent({
                   },
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    RichText(
+                      text: TextSpan(
+                        text: 'I already have an account',
+                        style: const TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 15,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            authorizationCubit.switchRegAuthComponent();
+                          },
+                      ),
+                    ),
                     simpleButton(
                       size,
                       'REGISTER',
@@ -160,6 +174,8 @@ Widget registrationComponent({
                           } catch (e) {
                             Fluttertoast.showToast(msg: 'Something went wrong');
                           }
+                        } else {
+                          Fluttertoast.showToast(msg: 'Uncorrect fields');
                         }
                       },
                     ),

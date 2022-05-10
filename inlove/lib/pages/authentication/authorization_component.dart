@@ -115,24 +115,37 @@ Widget authorizationComponent({
                               'password': passwordFieldController.text,
                             }),
                           );
+
                           if (authResponse.statusCode == 200) {
                             User user =
                                 User.fromJson(jsonDecode(authResponse.body));
-                            Response coupleResponse = await get(Uri.parse(
-                                "http://10.0.2.2:3001/api/coupleById/${user.id}"));
-                            Map<String, dynamic> couple =
-                                jsonDecode(coupleResponse.body);
-                            user = user.copyWith(coupleId: couple['id']);
-
                             GetIt.instance.registerSingleton<User>(
                               User(
                                 id: user.id,
-                                coupleId: user.coupleId,
                                 name: user.name,
                                 email: user.email,
                                 sex: user.sex,
                               ),
                             );
+                            Response coupleResponse = await get(Uri.parse(
+                                "http://10.0.2.2:3001/api/coupleById/${user.id}"));
+                            if (coupleResponse.statusCode != 404) {
+                              Map<String, dynamic> couple =
+                                  jsonDecode(coupleResponse.body);
+
+                              user = user.copyWith(coupleId: couple['id']);
+                              GetIt.instance.unregister<User>();
+                              GetIt.instance.registerSingleton<User>(
+                                User(
+                                  id: user.id,
+                                  coupleId: user.coupleId,
+                                  name: user.name,
+                                  email: user.email,
+                                  sex: user.sex,
+                                ),
+                              );
+                            }
+
                             openMainPage();
                           } else {
                             Fluttertoast.showToast(

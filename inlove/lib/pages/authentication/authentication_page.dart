@@ -31,6 +31,7 @@ class _AuthorizationPageState extends State<AuthorizationPage>
 
   @override
   void initState() {
+    _authorizationCubit.initState();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
@@ -70,40 +71,44 @@ class _AuthorizationPageState extends State<AuthorizationPage>
       Navigator.pushNamed(context, HomePage.routeName);
     }
 
+    Future<bool> _onWillPop() async {
+      return false;
+    }
+
     return BlocBuilder<AuthorizationCubit, AuthorizationState>(
       bloc: _authorizationCubit,
       builder: (context, state) {
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-          ),
-          body: ScrollConfiguration(
-            behavior: const ScrollBehavior(),
-            child: SingleChildScrollView(
-              child: state.showAuthorizationComponent
-                  ? authorizationComponent(
-                      size: _size,
-                      opacity: _opacity,
-                      transform: _transform,
-                      authorizationCubit: _authorizationCubit,
-                      openMainPage: _openMainPage,
-                      nameFieldController: _nameController,
-                      mailFieldController: _mailController,
-                      passwordFieldController: _passswordController,
-                    )
-                  : registrationComponent(
-                      size: _size,
-                      opacity: _opacity,
-                      transform: _transform,
-                      authorizationCubit: _authorizationCubit,
-                      state: state,
-                      nameFieldController: _nameController,
-                      mailFieldController: _mailController,
-                      passwordFieldController: _passswordController,
-                      repeatPasswordFieldController: _repeatPassswordController,
-                    ),
+        return WillPopScope(
+          onWillPop: _onWillPop,
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            body: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: SingleChildScrollView(
+                child: state.showAuthorizationComponent
+                    ? authorizationComponent(
+                        size: _size,
+                        opacity: _opacity,
+                        transform: _transform,
+                        authorizationCubit: _authorizationCubit,
+                        openMainPage: _openMainPage,
+                        nameFieldController: _nameController,
+                        mailFieldController: _mailController,
+                        passwordFieldController: _passswordController,
+                      )
+                    : registrationComponent(
+                        size: _size,
+                        opacity: _opacity,
+                        transform: _transform,
+                        authorizationCubit: _authorizationCubit,
+                        state: state,
+                        nameFieldController: _nameController,
+                        mailFieldController: _mailController,
+                        passwordFieldController: _passswordController,
+                        repeatPasswordFieldController:
+                            _repeatPassswordController,
+                      ),
+              ),
             ),
           ),
         );

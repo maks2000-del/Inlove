@@ -157,7 +157,10 @@ class TravelDestinationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final titleStyle = theme.textTheme.headline5!.copyWith(color: Colors.black);
+    final titleStyle = theme.textTheme.headline5!.copyWith(
+      color: Color.fromARGB(255, 255, 168, 39),
+      backgroundColor: Color.fromARGB(134, 37, 37, 37),
+    );
     final descriptionStyle = theme.textTheme.subtitle1;
 
     return Column(
@@ -259,7 +262,7 @@ class _DiaryTabState extends State<DiaryTab> with RestorationMixin {
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),
-                onPressed: () {},
+                onPressed: () => _diaryCubit.getCoupleMemorys(),
               ),
             ],
           ),
