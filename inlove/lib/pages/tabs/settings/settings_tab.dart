@@ -3,8 +3,11 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:inlove/components/button.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../components/input_autocomplete.dart';
+import '../../../injector.dart';
+import '../../../models/entities/internet_connection.dart';
 import '../../../models/user_model.dart';
 import 'settings_cubit.dart';
 import 'settings_state.dart';
@@ -17,8 +20,9 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
-  final _settingsCubit = GetIt.instance.get<SettingsCubit>();
+  final internetConnection = locator.get<InternetConnection>();
 
+  final _settingsCubit = GetIt.instance.get<SettingsCubit>();
   final _user = GetIt.instance.get<User>();
 
   @override
@@ -43,40 +47,48 @@ class _SettingsTabState extends State<SettingsTab> {
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
           ),
-          body: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                state.isPathnerChosen
-                    ? parthnersInfoBlock(
-                        cubit: _settingsCubit,
-                        user: _user,
-                        size: _size,
-                        state: state,
-                      )
-                    : findParthnerBlock(
-                        cubit: _settingsCubit,
-                        user: _user,
-                        size: _size,
-                        state: state,
+          body: internetConnection.status
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 0.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      state.isPathnerChosen
+                          ? parthnersInfoBlock(
+                              cubit: _settingsCubit,
+                              user: _user,
+                              size: _size,
+                              state: state,
+                            )
+                          : findParthnerBlock(
+                              cubit: _settingsCubit,
+                              user: _user,
+                              size: _size,
+                              state: state,
+                            ),
+                      const SizedBox(
+                        height: 20.0,
                       ),
-                const SizedBox(
-                  height: 20.0,
+                      simpleButton(
+                        _size,
+                        "LogOut",
+                        10,
+                        () => {
+                          GetIt.instance.unregister<User>(),
+                          Navigator.pushNamed(context, "/"),
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Lottie.asset(
+                    'assets/lottieJSON/no_internet.json',
+                    width: 380,
+                    height: 380,
+                  ),
                 ),
-                simpleButton(
-                  _size,
-                  "LogOut",
-                  10,
-                  () => {
-                    GetIt.instance.unregister<User>(),
-                    Navigator.pushNamed(context, "/"),
-                  },
-                ),
-              ],
-            ),
-          ),
         );
       },
     );

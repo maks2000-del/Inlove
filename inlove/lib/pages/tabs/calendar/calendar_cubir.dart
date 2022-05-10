@@ -1,26 +1,34 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:inlove/injector.dart';
 import 'package:inlove/models/user_model.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/shared_preferences.dart';
+import '../../../models/entities/internet_connection.dart';
 import '../../../models/special_date_model.dart';
+import '../../../repository/sqlite_repository.dart';
 
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit()
       : super(
           CalendarState(
-            calendarTabTitle: 'My dates',
             specialDateConstructorTitle: 'One more..',
+            toggleDate: 0,
             listOfDates: [],
           ),
         );
+  final internetConnection = locator.get<InternetConnection>();
+
   final user = locator.get<User>();
+  final sqliteDateRepository = locator.get<SqliteDateRepository>();
 
   void initState() async {
-    getCoupleDates();
+    internetConnection.status ? getCoupleDates() : getLocalCoupleDates();
     emit(
       state.copyWith(),
     );
@@ -36,14 +44,26 @@ class CalendarCubit extends Cubit<CalendarState> {
         'coupleId': user.coupleId.toString(),
         'title': title,
         'actionDate': date,
-        'bgColorId': "0",
+        'bgColorId': state.toggleDate.toString(),
       }),
     );
+    final speicalDate = SpeicalDate(
+      id: null,
+      coupleId: user.coupleId!,
+      title: title,
+      date: date,
+      bgColorId: state.toggleDate,
+    );
+    addToLocalStorage(speicalDate);
     if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
+  }
+
+  void addToLocalStorage(SpeicalDate speicalDate) {
+    sqliteDateRepository.insert(speicalDate, user.coupleId!);
   }
 
   void getCoupleDates() async {
@@ -61,7 +81,25 @@ class CalendarCubit extends Cubit<CalendarState> {
         state.copyWith(listOfDates: dates),
       );
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
+  }
+
+  void getLocalCoupleDates() async {
+    //TODO getIt
+    final prefs = await SharedPreferences.getInstance();
+    final sp = SharedPreferencesProvider(prefs);
+    List<SpeicalDate> dates =
+        await sqliteDateRepository.getEntityList(sp.getCoupleId());
+
+    emit(
+      state.copyWith(listOfDates: dates),
+    );
+  }
+
+  void switchToggleDate(int selectedIndex) {
+    emit(
+      state.copyWith(toggleDate: selectedIndex),
+    );
   }
 }

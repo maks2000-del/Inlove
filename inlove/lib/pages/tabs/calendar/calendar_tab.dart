@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:inlove/models/special_date_model.dart';
@@ -7,6 +6,7 @@ import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
 import 'package:inlove/pages/tabs/calendar/special_date_constructor.dart';
 
 import '../../../injector.dart';
+import '../../../main.dart';
 
 class CalendarTab extends StatefulWidget {
   const CalendarTab({Key? key}) : super(key: key);
@@ -109,7 +109,7 @@ Widget _gridItem(SpeicalDate speicalDate) {
       ),
       clipBehavior: Clip.antiAlias,
       child: GridTileBar(
-        backgroundColor: Colors.black45,
+        backgroundColor: calendarColors[speicalDate.bgColorId],
         title: _gridTitleText(speicalDate.date.toString()),
       ),
     ),

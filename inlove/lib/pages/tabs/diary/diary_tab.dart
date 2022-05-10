@@ -158,8 +158,8 @@ class TravelDestinationContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final titleStyle = theme.textTheme.headline5!.copyWith(
-      color: Color.fromARGB(255, 255, 168, 39),
-      backgroundColor: Color.fromARGB(134, 37, 37, 37),
+      color: const Color.fromARGB(255, 255, 168, 39),
+      backgroundColor: const Color.fromARGB(134, 37, 37, 37),
     );
     final descriptionStyle = theme.textTheme.subtitle1;
 

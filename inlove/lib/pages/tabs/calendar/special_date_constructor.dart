@@ -8,6 +8,9 @@ import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../main.dart';
+import '../../../models/entities/internet_connection.dart';
+
 class SpecialDateConstructor extends StatefulWidget {
   static const routeName = '/specialDateConstructor';
 
@@ -30,11 +33,12 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
       bloc: _calendarCubit,
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(state.specialDateConstructorTitle),
+          appBar: NeumorphicAppBar(
+            title: const Text('New date'),
           ),
           body: _body(
             cubit: _calendarCubit,
+            state: state,
             size: _size,
             titleController: _titleController,
           ),
@@ -45,68 +49,152 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
 
   Widget _body({
     required CalendarCubit cubit,
+    required CalendarState state,
     required Size size,
     required TextEditingController titleController,
   }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Center(
-          child: Lottie.asset(
-            'assets/lottieJSON/calendar.json',
-            width: 250,
-            height: 250,
-            fit: BoxFit.fill,
-          ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            inputTextfield(
-              size: size,
-              icon: Icons.text_fields,
-              hintText: 'Date title',
-              isPassword: false,
-              isEmail: false,
-              inputController: titleController,
+    final internetConnection = locator.get<InternetConnection>();
+
+    return internetConnection.status
+        ? SafeArea(
+            minimum:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          'assets/lottieJSON/calendar.json',
+                          width: 250,
+                          height: 250,
+                        ),
+                        inputTextfield(
+                          size: size,
+                          icon: Icons.text_fields,
+                          hintText: 'Date title',
+                          isPassword: false,
+                          isEmail: false,
+                          inputController: titleController,
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        NeumorphicToggle(
+                          height: 50.0,
+                          width: 300.0,
+                          children: [
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[0],
+                                ),
+                              ),
+                            ),
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[1],
+                                ),
+                              ),
+                            ),
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[2],
+                                ),
+                              ),
+                            ),
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[3],
+                                ),
+                              ),
+                            ),
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[4],
+                                ),
+                              ),
+                            ),
+                            ToggleElement(
+                              background: Center(
+                                child: CircleAvatar(
+                                  backgroundColor: calendarColors[5],
+                                ),
+                              ),
+                            ),
+                          ],
+                          thumb: Center(
+                            child: Container(
+                              color: calendarColors[state.toggleDate],
+                            ),
+                          ),
+                          selectedIndex: state.toggleDate,
+                          onChanged: (selected) => {
+                            cubit.switchToggleDate(selected),
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 20.0),
+                          alignment: Alignment.centerLeft,
+                          child: simpleButton(
+                            size,
+                            "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}",
+                            5.0,
+                            () => {_selectDate(context)},
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 30.0,
+                        bottom: 20.0,
+                        right: 20.0,
+                      ),
+                      alignment: Alignment.centerRight,
+                      child: simpleButton(
+                        size,
+                        'CREATE',
+                        20.0,
+                        () async {
+                          await cubit.createNewDate(
+                            _titleController.text,
+                            _selectedDate.toString(),
+                          )
+                              ? Fluttertoast.showToast(
+                                  msg: 'A new date was added',
+                                )
+                              : Fluttertoast.showToast(
+                                  msg: 'Something went wrong',
+                                );
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(
-              height: 20.0,
+          )
+        : Center(
+            child: Lottie.asset(
+              'assets/lottieJSON/no_internet.json',
+              width: 400,
+              height: 400,
             ),
-            simpleButton(
-              size,
-              "${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}",
-              5.0,
-              () => {_selectDate(context)},
-            ),
-            //TODO color picker
-          ],
-        ),
-        Container(
-          margin: const EdgeInsets.only(bottom: 14.0, right: 20.0),
-          alignment: Alignment.centerRight,
-          child: simpleButton(
-            size,
-            'CREATE',
-            20.0,
-            () async {
-              await cubit.createNewDate(
-                _titleController.text,
-                _selectedDate.toString(),
-              )
-                  ? Fluttertoast.showToast(
-                      msg: 'A new date was added',
-                    )
-                  : Fluttertoast.showToast(
-                      msg: 'Something went wrong',
-                    );
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
-    );
+          );
   }
 
   _selectDate(BuildContext context) async {

@@ -1,25 +1,25 @@
 import '../../../models/special_date_model.dart';
 
 class CalendarState {
-  final String calendarTabTitle;
   final String specialDateConstructorTitle;
+  final int toggleDate;
   final List<SpeicalDate> listOfDates;
 
   CalendarState({
-    required this.calendarTabTitle,
     required this.specialDateConstructorTitle,
+    required this.toggleDate,
     required this.listOfDates,
   });
 
   CalendarState copyWith({
-    String? calendarTabTitle,
     String? specialDateConstructorTitle,
+    int? toggleDate,
     List<SpeicalDate>? listOfDates,
   }) {
     return CalendarState(
-      calendarTabTitle: calendarTabTitle ?? this.calendarTabTitle,
       specialDateConstructorTitle:
           specialDateConstructorTitle ?? this.specialDateConstructorTitle,
+      toggleDate: toggleDate ?? this.toggleDate,
       listOfDates: listOfDates ?? this.listOfDates,
     );
   }

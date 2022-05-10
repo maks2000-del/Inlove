@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:inlove/models/entities/short_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../helpers/shared_preferences.dart';
+import '../../../injector.dart';
 import '../../../models/user_model.dart';
 import 'settings_state.dart';
 
@@ -49,6 +52,14 @@ class SettingsCubit extends Cubit<SettingsState> {
           emit(
             state.copyWith(isPathnerChosen: newParthnerStatus),
           );
+          try {
+            //TODO getIt
+            final prefs = await SharedPreferences.getInstance();
+            final sp = SharedPreferencesProvider(prefs);
+            sp.setCoupleId(_user.coupleId!);
+          } catch (e) {
+            throw Exception(e);
+          }
         }
         break;
 
@@ -179,6 +190,9 @@ class SettingsCubit extends Cubit<SettingsState> {
           emit(
             state.copyWith(isPathnerChosen: true),
           );
+          final prefs = await SharedPreferences.getInstance();
+          final sp = SharedPreferencesProvider(prefs);
+          sp.setCoupleId(user.coupleId!);
           return "sent";
         } else {
           return "error";

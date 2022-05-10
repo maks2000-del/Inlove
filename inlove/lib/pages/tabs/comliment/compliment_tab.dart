@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../../injector.dart';
+import '../../../models/entities/internet_connection.dart';
 import '../../../models/user_model.dart';
 
 class ComplimentTab extends StatefulWidget {
@@ -22,7 +25,7 @@ class _ComplimentTabState extends State<ComplimentTab> {
       final date = DateTime.now().toString().substring(0, 10);
       final sex = user.sex == sexes.male ? "male" : "female";
       Response response = await get(Uri.parse(
-          "http://10.0.2.2:3001/api/compliment/couple/${user.coupleId}.${date}.${sex}"));
+          "http://10.0.2.2:3001/api/compliment/couple/${user.coupleId}.$date.$sex"));
       Map<String, dynamic> copmliment = jsonDecode(response.body);
       setState(() {
         complimentText = copmliment['compliment_text'];
@@ -40,6 +43,7 @@ class _ComplimentTabState extends State<ComplimentTab> {
     getCompliment();
   }
 
+  final internetConnection = locator.get<InternetConnection>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,12 +59,20 @@ class _ComplimentTabState extends State<ComplimentTab> {
           ),
         ],
       ),
-      body: AnimCard(
-        null,
-        const Color(0xffFF6594),
-        cardTitle,
-        complimentText,
-      ),
+      body: internetConnection.status
+          ? AnimCard(
+              null,
+              const Color(0xffFF6594),
+              cardTitle,
+              complimentText,
+            )
+          : Center(
+              child: Lottie.asset(
+                'assets/lottieJSON/no_internet.json',
+                width: 380,
+                height: 380,
+              ),
+            ),
     );
   }
 }

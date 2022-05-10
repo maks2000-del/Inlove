@@ -20,7 +20,7 @@ Widget autocompleteTextfield(List<ShortUser> options, SettingsCubit cubit) {
       for (final user in options) {
         if (user.name == selection) cubit.setParthnerId(user.id);
       }
-      debugPrint('You just selected ${selection}:');
+      debugPrint('You just selected $selection:');
     },
   );
 }
