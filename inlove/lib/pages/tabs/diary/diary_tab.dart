@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
 import 'package:inlove/pages/tabs/diary/diary_state.dart';
 
+import '../../../models/entities/internet_connection.dart';
 import '../../../models/memory_model.dart';
 import 'memory_constructor.dart';
 
@@ -162,6 +163,7 @@ class TravelDestinationContent extends StatelessWidget {
       backgroundColor: const Color.fromARGB(134, 37, 37, 37),
     );
     final descriptionStyle = theme.textTheme.subtitle1;
+    final _internetConnection = GetIt.instance.get<InternetConnection>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +173,11 @@ class TravelDestinationContent extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(
-                child: Image.network('http://10.0.2.2:3001/${memory.photo}'),
+                child: _internetConnection.status
+                    ? Image.network(
+                        '${_internetConnection.localHost}/${memory.photo}',
+                      )
+                    : Image.asset('assets/img/no_image.jpg'),
               ),
               Positioned(
                 bottom: 16,

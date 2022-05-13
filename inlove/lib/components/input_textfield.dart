@@ -16,7 +16,9 @@ Widget inputTextfield({
       padding: EdgeInsets.only(right: size.width / 30),
       child: TextField(
         controller: inputController,
-        style: TextStyle(color: Colors.black.withOpacity(.8)),
+        style: TextStyle(
+          color: Colors.black.withOpacity(.8),
+        ),
         obscureText: isPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
@@ -27,8 +29,10 @@ Widget inputTextfield({
           border: InputBorder.none,
           hintMaxLines: 1,
           hintText: hintText,
-          hintStyle:
-              TextStyle(fontSize: 14, color: Colors.black.withOpacity(.5)),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Colors.black.withOpacity(.5),
+          ),
           suffixIcon: inputController.text.isEmpty
               ? null
               : IconButton(

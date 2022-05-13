@@ -13,7 +13,9 @@ Widget autocompleteTextfield(List<ShortUser> options, SettingsCubit cubit) {
         return const Iterable<String>.empty();
       }
       return names.where((String option) {
-        return option.contains(textEditingValue.text.toLowerCase());
+        return option.contains(
+          textEditingValue.text.toLowerCase(),
+        );
       });
     },
     onSelected: (String selection) {

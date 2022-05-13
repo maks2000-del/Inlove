@@ -5,8 +5,8 @@ import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
 import 'package:inlove/pages/tabs/calendar/special_date_constructor.dart';
 
+import '../../../helpers/app_constants.dart';
 import '../../../injector.dart';
-import '../../../main.dart';
 
 class CalendarTab extends StatefulWidget {
   const CalendarTab({Key? key}) : super(key: key);

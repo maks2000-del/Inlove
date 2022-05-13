@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
-import 'package:lottie/lottie.dart';
+import 'package:inlove/repository/compliment_repository.dart';
 
+import '../../../components/connection_problecms_animation.dart';
 import '../../../injector.dart';
 import '../../../models/entities/internet_connection.dart';
 import '../../../models/user_model.dart';
@@ -17,24 +16,18 @@ class ComplimentTab extends StatefulWidget {
 }
 
 class _ComplimentTabState extends State<ComplimentTab> {
-  final user = GetIt.instance.get<User>();
-  String complimentText = "";
-  String cardTitle = "Check for compliment";
+  final _user = GetIt.instance.get<User>();
+  final _complimantRepository = GetIt.instance.get<ComplimantRepository>();
+  String _complimentText = "";
+  final String _cardTitle = "Check for compliment";
+
   void getCompliment() async {
-    try {
-      final date = DateTime.now().toString().substring(0, 10);
-      final sex = user.sex == sexes.male ? "male" : "female";
-      Response response = await get(Uri.parse(
-          "http://10.0.2.2:3001/api/compliment/couple/${user.coupleId}.$date.$sex"));
-      Map<String, dynamic> copmliment = jsonDecode(response.body);
-      setState(() {
-        complimentText = copmliment['compliment_text'];
-      });
-    } catch (e) {
-      setState(() {
-        complimentText = "Maybe next time :P";
-      });
-    }
+    final date = DateTime.now();
+    final complimentText =
+        await _complimantRepository.getCompliment(_user.id, date, _user.sex);
+    setState(() {
+      _complimentText = complimentText;
+    });
   }
 
   @override
@@ -63,16 +56,10 @@ class _ComplimentTabState extends State<ComplimentTab> {
           ? AnimCard(
               null,
               const Color(0xffFF6594),
-              cardTitle,
-              complimentText,
+              _cardTitle,
+              _complimentText,
             )
-          : Center(
-              child: Lottie.asset(
-                'assets/lottieJSON/no_internet.json',
-                width: 380,
-                height: 380,
-              ),
-            ),
+          : connectionProblemsAnimation(),
     );
   }
 }

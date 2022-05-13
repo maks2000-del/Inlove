@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get_it/get_it.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 import 'package:inlove/pages/authentication/authentication_state.dart';
 import 'package:inlove/pages/authentication/authorization_component.dart';
 import 'package:inlove/pages/authentication/registration_component.dart';
 
 import 'package:inlove/pages/home/home_page.dart';
+
+import '../../repository/couple_repository.dart';
+import '../../repository/user_repository.dart';
 
 class AuthorizationPage extends StatefulWidget {
   static const routeName = '/authorizationPage';
@@ -18,6 +22,9 @@ class AuthorizationPage extends StatefulWidget {
 
 class _AuthorizationPageState extends State<AuthorizationPage>
     with SingleTickerProviderStateMixin {
+  final _userPerository = GetIt.instance.get<UserPerository>();
+  final _coupleRepository = GetIt.instance.get<CoupleRepository>();
+
   final AuthorizationCubit _authorizationCubit = AuthorizationCubit();
 
   late AnimationController _controller;
@@ -95,6 +102,8 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                         nameFieldController: _nameController,
                         mailFieldController: _mailController,
                         passwordFieldController: _passswordController,
+                        userPerository: _userPerository,
+                        coupleRepository: _coupleRepository,
                       )
                     : registrationComponent(
                         size: _size,
@@ -107,6 +116,7 @@ class _AuthorizationPageState extends State<AuthorizationPage>
                         passwordFieldController: _passswordController,
                         repeatPasswordFieldController:
                             _repeatPassswordController,
+                        userPerository: _userPerository,
                       ),
               ),
             ),

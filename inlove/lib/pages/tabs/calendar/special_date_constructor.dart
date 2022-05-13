@@ -8,7 +8,8 @@ import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_state.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../main.dart';
+import '../../../components/connection_problecms_animation.dart';
+import '../../../helpers/app_constants.dart';
 import '../../../models/entities/internet_connection.dart';
 
 class SpecialDateConstructor extends StatefulWidget {
@@ -188,13 +189,7 @@ class _SpecialDateConstructorState extends State<SpecialDateConstructor> {
               ),
             ),
           )
-        : Center(
-            child: Lottie.asset(
-              'assets/lottieJSON/no_internet.json',
-              width: 400,
-              height: 400,
-            ),
-          );
+        : connectionProblemsAnimation();
   }
 
   _selectDate(BuildContext context) async {

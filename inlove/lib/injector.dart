@@ -1,12 +1,15 @@
-import 'dart:io';
-
 import 'package:get_it/get_it.dart';
 import 'package:inlove/pages/authentication/authentication_cubit.dart';
 import 'package:inlove/pages/home/home_cubit.dart';
 import 'package:inlove/pages/tabs/calendar/calendar_cubir.dart';
 import 'package:inlove/pages/tabs/diary/diary_cubit.dart';
 import 'package:inlove/pages/tabs/settings/settings_cubit.dart';
-import 'package:inlove/repository/sqlite_repository.dart';
+import 'package:inlove/helpers/sqlite_helper.dart';
+import 'package:inlove/repository/compliment_repository.dart';
+import 'package:inlove/repository/couple_repository.dart';
+import 'package:inlove/repository/entity_repository.dart';
+import 'package:inlove/repository/memory_repository.dart';
+import 'package:inlove/repository/special_date_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'models/entities/internet_connection.dart';
@@ -16,21 +19,32 @@ final locator = GetIt.instance;
 
 void setUp() {
   _setUpConnection();
-  _setUpUserPerositories();
-  _setUpCubits();
   _setUpSQLite();
+  _setUpHttpRerositories();
+  _setUpCubits();
 }
 
-void _setUpConnection() async {
-  final connection = await checkForInternetConnection();
+void _setUpConnection() {
   locator.registerSingleton<InternetConnection>(
-    InternetConnection(connection),
+    InternetConnection(),
   );
 }
 
-void _setUpUserPerositories() {
+void _setUpHttpRerositories() {
   locator.registerFactory<UserPerository>(
     () => UserPerository(),
+  );
+  locator.registerFactory<ComplimantRepository>(
+    () => ComplimantRepository(),
+  );
+  locator.registerFactory<MemoryRepository>(
+    () => MemoryRepository(),
+  );
+  locator.registerFactory<SpecialDateRepository>(
+    () => SpecialDateRepository(),
+  );
+  locator.registerFactory<CoupleRepository>(
+    () => CoupleRepository(),
   );
 }
 
@@ -62,17 +76,4 @@ void _setUpCubits() {
   locator.registerFactory<CalendarCubit>(
     () => CalendarCubit(),
   );
-}
-
-Future<bool> checkForInternetConnection() async {
-  try {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      return true;
-    } else {
-      return false;
-    }
-  } on SocketException catch (_) {
-    return false;
-  }
 }

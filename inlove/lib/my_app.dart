@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthorizationPage(),
         HomePage.routeName: (context) => const HomePage(),
-        MemoryConstructor.routeName: (context) => MemoryConstructor(),
+        MemoryConstructor.routeName: (context) => const MemoryConstructor(),
         SpecialDateConstructor.routeName: (context) =>
             const SpecialDateConstructor(),
       },

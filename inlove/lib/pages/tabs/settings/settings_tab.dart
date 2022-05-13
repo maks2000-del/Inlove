@@ -3,8 +3,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:inlove/components/button.dart';
-import 'package:lottie/lottie.dart';
 
+import '../../../components/connection_problecms_animation.dart';
 import '../../../components/input_autocomplete.dart';
 import '../../../injector.dart';
 import '../../../models/entities/internet_connection.dart';
@@ -82,13 +82,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     ],
                   ),
                 )
-              : Center(
-                  child: Lottie.asset(
-                    'assets/lottieJSON/no_internet.json',
-                    width: 380,
-                    height: 380,
-                  ),
-                ),
+              : connectionProblemsAnimation(),
         );
       },
     );

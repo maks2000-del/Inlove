@@ -1,23 +1,19 @@
-import 'dart:io';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:inlove/models/memory_model.dart';
 
 class DiaryState {
   final List<Memory> coupleMemorys;
-  final File? pickedPhoto;
+  final ImagePicker picker = ImagePicker();
 
   DiaryState({
     required this.coupleMemorys,
-    this.pickedPhoto,
   });
 
   DiaryState copyWith({
     List<Memory>? coupleMemorys,
-    File? pickedPhoto,
   }) {
     return DiaryState(
       coupleMemorys: coupleMemorys ?? this.coupleMemorys,
-      pickedPhoto: pickedPhoto ?? this.pickedPhoto,
     );
   }
 }
